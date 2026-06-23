@@ -24,7 +24,7 @@ import com.richard.library.context.util.px2spUnit
  */
 data class DialogButton(
     val text: String,
-    val textColor: Color = Color(AppContext.getColor(R.color.button_text)),
+    val textColor: Color? = null,
     val textSize: TextUnit = AppContext.getDimension(R.dimen.button_text_size).px2spUnit(),
     val bgColor: Color = Color(AppContext.getColor(R.color.button_un_press_bg)),
     val shape: RoundedCornerShape = RoundedCornerShape(AppContext.getDimension(R.dimen.radius_value)),

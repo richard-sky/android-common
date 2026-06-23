@@ -31,15 +31,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -64,6 +63,7 @@ import com.richard.library.context.util.isNull
  * @param titleTextStyle 标题文字样式
  * @param buttonList 底部按钮集合
  * @param buttonArrangement 按钮行对齐方式
+ * @param dialogBgColor dialog 背景颜色
  * @param dialogCorner 弹窗圆角
  * @param dialogSpace 弹窗整体内边距
  * @param contentSpace 标题与内容间距
@@ -86,11 +86,12 @@ fun ContentDialog(
         fontWeight = FontWeight.Medium
     ),
     buttonList: List<DialogButton>? = null,
-    buttonArrangement: Arrangement.Horizontal = Arrangement.End,
+    buttonArrangement: Arrangement.Horizontal = Arrangement.Center,
+    dialogBgColor: Color = colorResource(R.color.bg),
     dialogCorner: Dp = dimensionResource(R.dimen.big_radius_value),
     dialogSpace: Dp = dimensionResource(R.dimen.content_padding),
-    contentSpace: Dp = 14.dp,
-    buttonTopSpace: Dp = 30.dp,
+    contentSpace: Dp = dimensionResource(R.dimen.content_padding),
+    buttonTopSpace: Dp = dimensionResource(R.dimen.button_margin_top),
     outsideClickDismiss: Boolean = true,
     showBackMask: Boolean = true,
     onDismiss: (() -> Unit)? = null,
@@ -180,7 +181,7 @@ fun ContentDialog(
             Card(
                 modifier = if (modifier.isNull()) Modifier else modifier,
                 shape = RoundedCornerShape(dialogCorner),
-                colors = CardDefaults.cardColors(containerColor = colorResource(R.color.bg))
+                colors = CardDefaults.cardColors(containerColor = dialogBgColor)
             ) {
                 Column(modifier = Modifier.padding(dialogSpace)) {
                     // 标题区域
@@ -213,10 +214,20 @@ fun ContentDialog(
                                 Spacer(modifier = Modifier.width(dimensionResource(R.dimen.content_item_margin)))
                             }
 
+                            val textColor = if (button.textColor.isNull()) {
+                                if (button.isOutline) {
+                                    button.bgColor
+                                } else {
+                                    Color(AppContext.getColor(R.color.button_text))
+                                }
+                            } else {
+                                button.textColor
+                            }
+
                             FButton(
                                 text = button.text,
                                 textSize = button.textSize,
-                                textColor = button.textColor,
+                                textColor = textColor,
                                 isOutlinedButton = button.isOutline,
                                 width = button.width,
                                 height = button.height

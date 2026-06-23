@@ -20,9 +20,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.richard.ilbrary.compose.widget.BallLoading
 import com.richard.ilbrary.compose.widget.FButton
-import com.richard.ilbrary.compose.widget.LoadingDialog
 import com.richard.ilbrary.compose.widget.TipDialog
 import com.richard.ilbrary.compose.widget.data.DialogButton
 import com.richard.ilbrary.compose.widget.util.defaultDialogWidth

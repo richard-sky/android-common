@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -31,6 +32,12 @@ import com.richard.library.compose.widget.R
 fun LoadingDialog(
     show: MutableState<Boolean>,
     text: String? = "请稍等...",
+    bgColor: Color = colorResource(R.color.content_bg),
+    autoSize: TextAutoSize? = TextAutoSize.StepBased(
+        minFontSize = 9.sp,
+        maxFontSize = 12.sp,
+        stepSize = 0.2.sp
+    ),
     showBackMask: Boolean = false,
     modifier: Modifier = Modifier
         .width(100.dp)
@@ -40,7 +47,8 @@ fun LoadingDialog(
         show = show,
         modifier = modifier,
         outsideClickDismiss = false,
-        showBackMask = showBackMask
+        showBackMask = showBackMask,
+        dialogBgColor = bgColor
     ) {
 
         Column(
@@ -62,7 +70,8 @@ fun LoadingDialog(
                     modifier = Modifier.padding(top = 10.dp),
                     text = text,
                     textAlign = TextAlign.Center,
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
+                    autoSize = autoSize
                 )
             }
         }
