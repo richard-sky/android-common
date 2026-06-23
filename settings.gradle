@@ -1,6 +1,5 @@
 pluginManagement {
     repositories {
-        maven { url = 'https://maven.aliyun.com/repository/gradle-plugin' }
         google{
             content {
                 includeGroupByRegex("com\\.android.*")
@@ -10,6 +9,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven { url = 'https://maven.aliyun.com/repository/gradle-plugin' }
     }
 }
 
@@ -22,17 +22,17 @@ dependencyResolutionManagement {
     repositories {
         mavenLocal()
 
+        //jcenter()
+        google()
+        mavenCentral()
+        maven { url = "https://jitpack.io" }
+
         //阿里云仓库(https://developer.aliyun.com/mvn/guide)
         maven { url = 'https://maven.aliyun.com/repository/public/' }
         maven { url = 'https://maven.aliyun.com/repository/central' }
         maven { url = 'https://maven.aliyun.com/repository/apache-snapshots' }
 
         maven {url = 'https://gitee.com/richard-x/android-maven-repo/raw/master'}
-
-        //jcenter()
-        google()
-        mavenCentral()
-        maven { url = "https://jitpack.io" }
     }
 }
 
