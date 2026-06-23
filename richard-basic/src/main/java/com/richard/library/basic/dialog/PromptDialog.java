@@ -21,9 +21,9 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.StringRes;
 
 import com.richard.library.basic.R;
-import com.richard.library.basic.immersionbar.SystemBarUtil;
+import com.richard.library.context.immersionbar.SystemBarUtil;
 import com.richard.library.basic.util.DrawableUtil;
-import com.richard.library.basic.util.HideNavBarUtil;
+import com.richard.library.context.util.HideNavBarUtil;
 import com.richard.library.context.AppContext;
 import com.richard.library.context.util.DensityUtilKt;
 

@@ -1,15 +1,15 @@
-package com.richard.library.basic.immersionbar;
+package com.richard.library.context.immersionbar;
 
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_DEFAULT;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI_HIDE;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_OPPO;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG_GESTURE;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG_GESTURE_TYPE;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG_OLD;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_VIVO;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_DEFAULT;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_MIUI_HIDE;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_OPPO;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG_GESTURE;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG_GESTURE_TYPE;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_SAMSUNG_OLD;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_VIVO;
 
 import android.app.Application;
 import android.database.ContentObserver;

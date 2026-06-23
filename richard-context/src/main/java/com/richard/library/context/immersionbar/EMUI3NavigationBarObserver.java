@@ -1,4 +1,4 @@
-package com.richard.library.basic.immersionbar;
+package com.richard.library.context.immersionbar;
 
 import android.app.Application;
 import android.database.ContentObserver;
@@ -10,7 +10,7 @@ import android.provider.Settings;
 
 import java.util.ArrayList;
 
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_MODE_EMUI;
 
 /**
  * 华为Emui3状态栏监听器

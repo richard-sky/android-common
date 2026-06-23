@@ -1,6 +1,7 @@
-package com.richard.library.basic.immersionbar;
+package com.richard.library.context.immersionbar;
 
-import com.richard.library.basic.R;
+
+import com.richard.library.context.R;
 
 /**
  * @author geyifeng

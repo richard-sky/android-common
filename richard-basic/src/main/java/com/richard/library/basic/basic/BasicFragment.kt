@@ -15,9 +15,9 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.richard.library.basic.basic.uiview.UIView
 import com.richard.library.basic.basic.uiview.UIViewImpl
 import com.richard.library.basic.eventbus.EventData
-import com.richard.library.basic.immersionbar.ImmersionBar
-import com.richard.library.basic.immersionbar.SystemBarUtil
 import com.richard.library.basic.util.FragmentUtil
+import com.richard.library.context.immersionbar.ImmersionBar
+import com.richard.library.context.immersionbar.SystemBarUtil
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

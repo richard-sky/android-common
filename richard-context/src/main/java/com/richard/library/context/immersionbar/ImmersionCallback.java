@@ -1,4 +1,4 @@
-package com.richard.library.basic.immersionbar;
+package com.richard.library.context.immersionbar;
 
 /**
  * The interface Immersion callback.

@@ -1,5 +1,8 @@
 package com.richard.ilbrary.compose.widget
 
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -28,7 +31,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
@@ -42,6 +47,9 @@ import androidx.compose.ui.window.DialogWindowProvider
 import com.richard.ilbrary.compose.widget.data.DialogButton
 import com.richard.ilbrary.compose.widget.type.Direction
 import com.richard.library.compose.widget.R
+import com.richard.library.context.AppContext
+import com.richard.library.context.immersionbar.SystemBarUtil
+import com.richard.library.context.util.HideNavBarUtil
 import com.richard.library.context.util.isNotEmpty
 import com.richard.library.context.util.isNull
 
@@ -88,13 +96,25 @@ fun ContentDialog(
     onDismiss: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val context = LocalContext.current
+    val activity = remember(context) { AppContext.getActivity(context) }
+    var dialogWindow: Window? by remember { mutableStateOf(null) }
+
     // 动画可见状态：仅控制入场动画
     var animVisible by remember { mutableStateOf(false) }
 
-    // 同步外部show，只处理入场动画；关闭直接消失，不做退场延时
     LaunchedEffect(show.value) {
         animVisible = show.value
-        if (!show.value) {
+        if (show.value) {
+            //--隐藏状态栏和导航栏业务
+            if (!SystemBarUtil.isHideBar(activity)) {
+                return@LaunchedEffect
+            }
+            dialogWindow?.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+            )
+        } else {
             onDismiss?.invoke()
         }
     }
@@ -121,6 +141,26 @@ fun ContentDialog(
             usePlatformDefaultWidth = modifier.isNull(),
         )
     ) {
+
+        //--隐藏状态栏和导航栏业务
+        val rootView = LocalView.current
+        DisposableEffect(rootView) {
+            val win = rootView.findDialogWindow()
+            dialogWindow = win
+            win?.let { window ->
+                if (SystemBarUtil.isHideBar(activity)) {
+                    window.setFlags(
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    )
+                    HideNavBarUtil.hideBar(window, SystemBarUtil.getBarHide(activity))
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+                }
+            }
+
+            onDispose {
+            }
+        }
 
         if (!showBackMask) {
             val windowProvider = LocalView.current.parent as? DialogWindowProvider
@@ -197,4 +237,15 @@ fun ContentDialog(
             }
         }
     }
+}
+
+// 从View向上查找Dialog Window
+private fun View.findDialogWindow(): Window? {
+    var parentView: View? = this
+    while (parentView != null) {
+        val provider = parentView as? androidx.compose.ui.window.DialogWindowProvider
+        if (provider != null) return provider.window
+        parentView = parentView.parent as? View
+    }
+    return null
 }

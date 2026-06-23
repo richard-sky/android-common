@@ -16,8 +16,8 @@ import com.richard.library.basic.basic.dict.Direction;
 import com.richard.library.basic.basic.uiview.UIView;
 import com.richard.library.basic.basic.uiview.UIViewImpl;
 import com.richard.library.basic.eventbus.EventData;
-import com.richard.library.basic.immersionbar.ImmersionBar;
-import com.richard.library.basic.immersionbar.SystemBarUtil;
+import com.richard.library.context.immersionbar.ImmersionBar;
+import com.richard.library.context.immersionbar.SystemBarUtil;
 import com.richard.library.context.AppContext;
 import com.richard.library.context.util.DensityUtilKt;
 

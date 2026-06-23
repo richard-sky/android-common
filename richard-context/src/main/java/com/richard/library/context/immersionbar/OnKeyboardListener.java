@@ -1,4 +1,4 @@
-package com.richard.library.basic.immersionbar;
+package com.richard.library.context.immersionbar;
 
 /**
  * 软键盘监听

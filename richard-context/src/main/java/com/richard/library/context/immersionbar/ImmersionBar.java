@@ -1,15 +1,15 @@
-package com.richard.library.basic.immersionbar;
+package com.richard.library.context.immersionbar;
 
-import static com.richard.library.basic.immersionbar.Constants.FLAG_FITS_DEFAULT;
-import static com.richard.library.basic.immersionbar.Constants.FLAG_FITS_STATUS;
-import static com.richard.library.basic.immersionbar.Constants.FLAG_FITS_SYSTEM_WINDOWS;
-import static com.richard.library.basic.immersionbar.Constants.FLAG_FITS_TITLE;
-import static com.richard.library.basic.immersionbar.Constants.FLAG_FITS_TITLE_MARGIN_TOP;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_BOUNDARY_COLOR;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_DARK_MIUI;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_VIEW_ID;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_STATUS_BAR_DARK_MIUI;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_STATUS_BAR_VIEW_ID;
+import static com.richard.library.context.immersionbar.Constants.FLAG_FITS_DEFAULT;
+import static com.richard.library.context.immersionbar.Constants.FLAG_FITS_STATUS;
+import static com.richard.library.context.immersionbar.Constants.FLAG_FITS_SYSTEM_WINDOWS;
+import static com.richard.library.context.immersionbar.Constants.FLAG_FITS_TITLE;
+import static com.richard.library.context.immersionbar.Constants.FLAG_FITS_TITLE_MARGIN_TOP;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_BOUNDARY_COLOR;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_DARK_MIUI;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_VIEW_ID;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_STATUS_BAR_DARK_MIUI;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_STATUS_BAR_VIEW_ID;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -40,7 +40,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import com.richard.library.basic.R;
+import com.richard.library.context.R;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,9 +1,9 @@
-package com.richard.library.basic.immersionbar;
+package com.richard.library.context.immersionbar;
 
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT_LANDSCAPE;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_WIDTH;
-import static com.richard.library.basic.immersionbar.Constants.IMMERSION_STATUS_BAR_HEIGHT;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_HEIGHT_LANDSCAPE;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_NAVIGATION_BAR_WIDTH;
+import static com.richard.library.context.immersionbar.Constants.IMMERSION_STATUS_BAR_HEIGHT;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -20,7 +20,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
-import com.richard.library.basic.R;
+import com.richard.library.context.R;
 
 /**
  * The type Bar config.

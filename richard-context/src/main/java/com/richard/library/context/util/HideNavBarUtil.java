@@ -1,10 +1,10 @@
-package com.richard.library.basic.util;
+package com.richard.library.context.util;
 
 import android.os.Build;
 import android.view.View;
 import android.view.Window;
 
-import com.richard.library.basic.immersionbar.BarHide;
+import com.richard.library.context.immersionbar.BarHide;
 
 /**
  * author Richard
