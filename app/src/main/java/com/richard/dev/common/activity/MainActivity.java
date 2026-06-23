@@ -156,13 +156,6 @@ public class MainActivity extends BasicBindingActivity<ActivityMainBinding> {
             Cron4jActivity.start(getContext());
         });
 
-        //自定义解析word
-        binding.btnTestWord.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/testWord")
-                    .navigation();
-        });
-
         //Test FTP
         binding.btnTestFtp.setOnClickListener((v) -> {
             TestFTPActivity.start(getContext());

@@ -27,18 +27,6 @@
                 android:text="测试FTP" />
 
             <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_convert_pdf"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="Libreoffice转PDF" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_word"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="word文档解析" />
-
-            <com.richard.library.basic.widget.ButtonView
                 android:id="@+id/btn_test_cron"
                 style="@style/button_style"
                 android:layout_margin="@dimen/content_padding"
