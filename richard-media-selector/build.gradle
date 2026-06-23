@@ -1,0 +1,78 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.maven.publish)
+}
+
+android {
+    namespace = 'com.richard.library.mediaselector'
+    compileSdk = buildConfigs.compileSdk
+
+    defaultConfig {
+        minSdk = buildConfigs.minSdk
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+        //multiDexEnabled = true
+
+        ndk {
+            rootProject.ext.abiFilters.each { abiFilters it }
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        //标志启用对新语言api的支持
+        coreLibraryDesugaringEnabled = true
+
+        sourceCompatibility = buildConfigs.sourceCompatibility
+        targetCompatibility = buildConfigs.targetCompatibility
+    }
+
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
+}
+
+dependencies {
+    applyBasicDependencies(this.dependencies)
+
+    // PictureSelector 基础 (必须)
+    api 'io.github.lucksiege:pictureselector:v3.11.2'
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:5.0.7'
+    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.7'
+
+    // 图片压缩 (按需引入)
+    implementation 'io.github.lucksiege:compress:v3.11.2'
+
+    // 图片裁剪 (按需引入)
+    implementation 'io.github.lucksiege:ucrop:v3.11.2'
+
+    // 自定义相机 (按需引入)
+//    api 'io.github.lucksiege:camerax:v3.11.2'
+}
+
+// 配置发布
+def maven_export = rootProject.ext.maven_export
+configureMavenPublish(project) {
+    groupId = maven_export.groupId
+    artifactId = 'media-selector'
+    version = maven_export.version
+    url = maven_export.remoteRepoUrl
+    username = maven_export.username
+    password = maven_export.password
+    isAndroidLibrary = true
+    variant = 'release'
+}

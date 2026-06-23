@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_icon"
+        android:src="@drawable/icon_bluetooth"
+        android:adjustViewBounds="true"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        app:tint="#2196F3" />
+
+    <LinearLayout
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:lines="1"
+            android:text="蓝牙设备"
+            android:ellipsize="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Space
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"/>
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:textSize="12sp"
+            android:textColor="#6A6A6A"
+            android:lines="1"
+            android:text="DB:232:34:34:#2"
+            android:ellipsize="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_rssi"
+        android:textSize="12sp"
+        android:textColor="#6A6A6A"
+        android:lines="1"
+        android:text="23dBm"
+        android:ellipsize="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

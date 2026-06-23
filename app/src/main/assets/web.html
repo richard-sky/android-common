@@ -1,0 +1,32 @@
+<html lang="zh-CN">
+<title>示例</title>
+<body>
+    <h2 id="h4_text"></h2>
+    <h1 onclick="javascript:test()">测试是否支持localstorage</h1>
+    <h1 onclick="javascript:save()">保存localstorage</h1>
+</body>
+
+<script>
+
+     function test(){
+        if(!window.localStorage){
+ 	        alert("不支持localstorage");
+        }else{
+            alert("支持localstorage");
+        }
+     }
+
+     function save(){
+        var storage = window.localStorage;
+        storage.setItem("name","richard");
+        storage.setItem("pwd","123456");
+
+        alert("name: " + (storage["name"]) + "   pwd: " + (storage["pwd"]));
+     }
+
+     var storage = window.localStorage;
+     document.getElementById("h4_text").innerHTML=storage.name + "   " + storage.pwd;
+
+</script>
+
+</html>

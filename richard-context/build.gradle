@@ -1,0 +1,75 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.maven.publish)
+}
+
+android {
+    namespace = 'com.richard.library.context'
+    compileSdk = buildConfigs.compileSdk
+
+    defaultConfig {
+        minSdk = buildConfigs.minSdk
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+        //multiDexEnabled = true
+
+        ndk {
+            rootProject.ext.abiFilters.each { abiFilters it }
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        //标志启用对新语言api的支持
+        coreLibraryDesugaringEnabled = true
+
+        sourceCompatibility = buildConfigs.sourceCompatibility
+        targetCompatibility = buildConfigs.targetCompatibility
+    }
+
+    buildFeatures {
+        //viewBinding = true
+        //dataBinding = true
+    }
+}
+
+dependencies {
+    applyBasicDependencies(this.dependencies)
+
+    //appcompat
+    api libs.androidx.appcompat
+
+    //json
+    api 'com.alibaba:fastjson:1.1.76.android'
+
+    //cron4j
+    api 'it.sauronsoftware.cron4j:cron4j:2.2.5'
+
+    //compose
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.compose.ui.unit
+}
+
+// 配置发布
+def maven_export = rootProject.ext.maven_export
+configureMavenPublish(project) {
+    groupId = maven_export.groupId
+    artifactId = 'context'
+    version = maven_export.version
+    url = maven_export.remoteRepoUrl
+    username = maven_export.username
+    password = maven_export.password
+    isAndroidLibrary = true
+    variant = 'release'
+}

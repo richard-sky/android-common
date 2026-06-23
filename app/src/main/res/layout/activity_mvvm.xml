@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="loginViewModel"
+            type="com.richard.dev.common.mvvm.LoginViewModel" />
+
+        <variable
+            name="event"
+            type="com.richard.dev.common.activity.TestMVVMActivity.Event" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_username"
+            style="@style/edit_text_style.selector"
+            android:afterTextChanged="@{(s)->event.onTextChanged(s)}"
+            android:layout_margin="@dimen/content_padding"
+            android:hint="用户名"
+            android:text="@={loginViewModel.user.name}" />
+
+        <EditText
+            android:id="@+id/et_password"
+            style="@style/edit_text_style.selector"
+            android:inputType="textPassword"
+            android:layout_margin="@dimen/content_padding"
+            android:hint="密码" />
+
+        <TextView
+            android:id="@+id/tv_tip"
+            android:text="@{loginViewModel.tip}"
+            android:textColor="@color/red"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.richard.library.basic.widget.ButtonView
+            android:id="@+id/bv_login"
+            style="@style/button_style"
+            android:layout_margin="@dimen/content_padding"
+            android:onClick="@{()->event.onClickLogin()}"
+            android:text="登录" />
+
+    </LinearLayout>
+</layout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.richard.library.basic.widget.flowlayout.TagView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tag_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <CheckBox
+        android:id="@id/tag_view_compoundButton"
+        android:padding="10dp"
+        android:gravity="center"
+        android:drawablePadding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/selector_main_gray_stroke_color_round_check"
+        android:textColor="@drawable/selector_main_gray_text_color_check"
+        android:button="@null"
+        android:text="支付宝"
+        android:textSize="@dimen/textSize_16" />
+
+</com.richard.library.basic.widget.flowlayout.TagView>

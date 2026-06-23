@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+
+    <TextView
+        android:id="@+id/header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="下拉可以刷新"
+        android:textColor="#595959"
+        android:textSize="12sp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/content_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="0.5dp"
+            android:background="#afafaf"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="发现更多生活的乐趣"
+            android:textColor="#595959"
+            android:textSize="12sp"/>
+
+        <View
+            android:layout_width="30dp"
+            android:layout_height="0.5dp"
+            android:background="#afafaf"/>
+
+    </LinearLayout>
+
+
+    <com.richard.library.basic.widget.refresh.LoadingView
+        android:id="@+id/header_progress"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_below="@id/content_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"/>
+
+</RelativeLayout>

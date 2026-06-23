@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--ButtonView按钮属性-->
+    <declare-styleable name="ButtonView">
+        <attr name="bv_icon" format="reference" />
+        <attr name="bv_icon_tint" format="color" />
+        <attr name="bv_icon_size" format="dimension" />
+        <attr name="bv_icon_margin" format="dimension" />
+        <attr name="bv_icon_position">
+            <flag name="top" value="1" />
+            <flag name="bottom" value="2" />
+            <flag name="left" value="3" />
+            <flag name="right" value="4" />
+        </attr>
+        <attr name="bv_radius" format="dimension" />
+        <attr name="bv_topLeftRadius" format="dimension" />
+        <attr name="bv_topRightRadius" format="dimension" />
+        <attr name="bv_bottomLeftRadius" format="dimension" />
+        <attr name="bv_bottomRightRadius" format="dimension" />
+        <attr name="bv_border_line_size" format="dimension" />
+        <attr name="bv_border_line_color" format="color" />
+        <attr name="bv_text_is_bold" format="boolean" />
+
+        <!--优先使用android:background 指定值,并且其它按钮样式属性全部失效-->
+        <attr name="bv_backColor" format="color" />
+        <attr name="android:background" />
+
+        <attr name="android:enabled" format="boolean" />
+        <attr name="android:text" format="string" />
+        <attr name="android:textSize" format="dimension" />
+        <attr name="android:textColor" format="color" />
+    </declare-styleable>
+
+    <!--CountDownTimerButton属性-->
+    <declare-styleable name="CountDownTimerButton">
+        <attr name="cdtb_original_text" format="string" />
+        <attr name="cdtb_running_text" format="string" />
+        <attr name="cdtb_stop_text" format="string" />
+        <attr name="cdtb_second_value" format="integer" />
+    </declare-styleable>
+
+    <!--FormatEditText属性-->
+    <declare-styleable name="FormatEditText">
+        <attr name="fet_hintTextSize" format="dimension" />
+        <attr name="fet_inputTextSize" format="dimension" />
+        <attr name="fet_maxLength" format="integer" />
+        <attr name="fet_splitNum" format="integer" />
+        <attr name="fet_splitFlag" format="string" />
+    </declare-styleable>
+
+    <!--TabBarView属性-->
+    <declare-styleable name="TabBarView">
+        <!--字符，多个以|隔开-->
+        <attr name="tbv_texts" format="string" />
+
+        <!--选中和未选中状态的字体大小-->
+        <attr name="tbv_uncheck_text_size" format="dimension" />
+        <attr name="tbv_checked_text_size" format="dimension" />
+
+        <!--选中和未选中状态的字体加粗状态-->
+        <attr name="tbv_uncheck_text_is_bold" format="boolean" />
+        <attr name="tbv_checked_text_is_bold" format="boolean" />
+
+        <!--选中和未选中状态的字体颜色-->
+        <attr name="tbv_uncheck_text_color" format="color" />
+        <attr name="tbv_checked_text_color" format="color" />
+
+        <!--选中和未选中状态的背景颜色-->
+        <attr name="tbv_item_uncheck_back_color" format="color" />
+        <attr name="tbv_item_checked_back_color" format="color" />
+
+        <!--选中和未选中状态的背景drawable-->
+        <attr name="tbv_item_back_drawable" format="reference" />
+
+        <!--设置item项的setDrawablePadding属性-->
+        <attr name="tbv_item_drawable_padding" format="dimension" />
+
+        <!--整个TabBarView的圆角弧度控制-->
+        <attr name="tbv_radius" format="dimension" />
+        <attr name="tbv_topLeftRadius" format="dimension" />
+        <attr name="tbv_topRightRadius" format="dimension" />
+        <attr name="tbv_bottomLeftRadius" format="dimension" />
+        <attr name="tbv_bottomRightRadius" format="dimension" />
+
+        <!--item项的分割线宽度和颜色-->
+        <attr name="tbv_blank_view_width" format="dimension" />
+        <attr name="tbv_blank_view_color" format="color" />
+
+        <!--是否启用以整个TabBarView的宽度来进行按item项均分宽度-->
+        <attr name="tbv_width_isAverage" format="boolean" />
+
+        <!--item项之间的内边距-->
+        <attr name="tbv_padding_left_right" format="dimension" />
+
+        <!--指定默认选中项下标-->
+        <attr name="tbv_default_checked_item_position" format="integer" />
+
+        <!--是否启用将指定的背景颜色或者背景图片显示到item项底部-->
+        <attr name="tbv_is_bottom_bar_style" format="boolean" />
+
+        <!--当tbv_is_bottom_bar_style为true时的bar的高度和宽度-->
+        <attr name="tbv_whenBottomBarStyleHeight" format="dimension" />
+        <attr name="tbv_whenBottomBarStyleWidth" format="dimension" />
+
+        <!--整个TabBarView的背景颜色-->
+        <attr name="tbv_content_back_color" format="color" />
+
+        <!--是否将item项的圆角弧度同时应用到TabBarView的弧度-->
+        <attr name="tbv_isApplyContentRadius" format="boolean" />
+
+        <!--是否启用TabBarView的边框线条-->
+        <attr name="tbv_isApplyContentBorder" format="boolean" />
+
+        <!--TabBarView的边框线条大小和颜色-->
+        <attr name="tbv_content_border_line_size" format="dimension" />
+        <attr name="tbv_content_border_line_color" format="color" />
+    </declare-styleable>
+
+    <!--SRecyclerView-->
+    <declare-styleable name="SRecyclerView">
+        <!--分割线颜色-->
+        <attr name="srv_divider_color" format="color" />
+        <!--分割线大小-->
+        <attr name="srv_divider_size" format="dimension" />
+        <attr name="srv_divider_horizontal_size" format="dimension" />
+        <attr name="srv_divider_vertical_size" format="dimension" />
+        <!--分割线drawable-->
+        <attr name="srv_divider_drawable" format="reference" />
+        <!--是否显示第一条item顶部的分割线 默认false-->
+        <attr name="srv_divider_show_first" format="boolean" />
+        <!--是否显示第一条item底部的分割线 默认true-->
+        <attr name="srv_divider_show_last" format="boolean" />
+
+        <!--RecyclerView类型-->
+        <attr name="srv_type">
+            <flag name="linear" value="0" />
+            <flag name="grid" value="1" />
+            <flag name="stagger" value="2" />
+        </attr>
+        <!--列表滑动方向-->
+        <attr name="srv_orientation">
+            <flag name="horizontal" value="0" />
+            <flag name="vertical" value="1" />
+        </attr>
+        <!--列表列数(仅srv_type为grid，stagger时有效)-->
+        <attr name="srv_column" format="integer" />
+        <!--是否开启列表默认动画(默认true)-->
+        <attr name="srv_default_animator_open" format="boolean" />
+        <!--是否开启悬浮固定header显示-->
+        <attr name="srv_enabled_pinned_header" format="boolean" />
+        <!--是否具有固定大小-->
+        <attr name="srv_hasFixedSize" format="boolean" />
+        <!--是否禁用列表全部事件-->
+        <attr name="srv_disEnableEvent" format="boolean"/>
+    </declare-styleable>
+
+    <!--SwitchButton-->
+    <declare-styleable name="SwitchButton">
+        <attr name="sb_shadow_radius" format="reference|dimension" />
+        <attr name="sb_shadow_offset" format="reference|dimension" />
+        <attr name="sb_shadow_color" format="reference|color" />
+        <attr name="sb_uncheck_color" format="reference|color" />
+        <attr name="sb_checked_color" format="reference|color" />
+        <attr name="sb_border_width" format="reference|dimension" />
+        <attr name="sb_checkline_color" format="reference|color" />
+        <attr name="sb_checkline_width" format="reference|dimension" />
+        <attr name="sb_uncheckcircle_color" format="reference|color" />
+        <attr name="sb_uncheckcircle_width" format="reference|dimension" />
+        <attr name="sb_uncheckcircle_radius" format="reference|dimension" />
+        <attr name="sb_checked" format="reference|boolean" />
+        <attr name="sb_shadow_effect" format="reference|boolean" />
+        <attr name="sb_effect_duration" format="reference|integer" />
+        <attr name="sb_button_color" format="reference|color" />
+        <attr name="sb_show_indicator" format="reference|boolean" />
+        <attr name="sb_background" format="reference|color" />
+        <attr name="sb_enable_effect" format="reference|boolean" />
+    </declare-styleable>
+
+    <!--EmptyView-->
+    <declare-styleable name="EmptyView">
+        <attr name="ev_icon" format="reference" />
+        <!--默认setAdjustViewBound(true)-->
+        <attr name="ev_icon_width" format="dimension" />
+        <attr name="ev_text_margin_top" format="dimension" />
+        <attr name="ev_text_bold" format="boolean" />
+        <!--系统属性-->
+        <attr name="android:text" />
+        <attr name="android:textColor" />
+        <attr name="android:textSize" />
+    </declare-styleable>
+
+    <!--UploadImageView-->
+    <declare-styleable name="UploadImageView">
+        <!--列数-->
+        <attr name="android:columnCount" format="integer" />
+        <!--间距大小-->
+        <attr name="uiv_divider_size" format="dimension" />
+        <!--间距颜色-->
+        <attr name="uiv_divider_color" format="dimension" />
+        <!--控件列表item高度-->
+        <attr name="uiv_item_view_height" format="dimension" />
+        <!--是否显示删除按钮-->
+        <attr name="uiv_show_delete" format="boolean" />
+        <!--可上传的最大数量-->
+        <attr name="uiv_max_size" format="integer" />
+    </declare-styleable>
+
+    <!--NavigationBar-->
+    <declare-styleable name="NavigationBar">
+        <!--背景-->
+        <attr name="android:background" />
+        <!--文本颜色-->
+        <attr name="nav_text_color" format="color" />
+        <!--底部线条颜色-->
+        <attr name="nav_bottom_line_color" format="color" />
+        <!--底部线条粗细-->
+        <attr name="nav_bottom_line_size" format="dimension" />
+        <!--是否显示底部线条-->
+        <attr name="nav_bottom_line_show" format="boolean" />
+        <!--标题文本大小-->
+        <attr name="nav_title_text_size" format="dimension" />
+        <!--标题文本是否加粗-->
+        <attr name="nav_title_text_bold" format="boolean" />
+        <!--标题文本-->
+        <attr name="nav_title_text" format="string" />
+        <!--左边ImageView资源-->
+        <attr name="nav_left_img" format="reference" />
+        <!--左边TextView文本-->
+        <attr name="nav_left_text" format="string" />
+        <!--右边ImageView资源-->
+        <attr name="nav_right_img" format="reference" />
+        <!--右边TextView文本-->
+        <attr name="nav_right_text" format="string" />
+        <!--中间布局文件资源id-->
+        <attr name="nav_center_layout" format="reference" />
+
+        <!--圆角弧度控制-->
+        <attr name="nav_radius" format="dimension" />
+        <attr name="nav_topLeftRadius" format="dimension" />
+        <attr name="nav_topRightRadius" format="dimension" />
+        <attr name="nav_bottomLeftRadius" format="dimension" />
+        <attr name="nav_bottomRightRadius" format="dimension" />
+    </declare-styleable>
+
+    <!--ExpandLayout-->
+    <declare-styleable name="ExpandLayout">
+        <attr name="el_open" format="boolean" />
+    </declare-styleable>
+
+    <!--CountSelectView-->
+    <declare-styleable name="CountSelectView">
+        <attr name="android:textColor" format="color" />
+        <attr name="android:textSize" format="dimension" />
+        <attr name="csv_bold" format="boolean" />
+        <attr name="csv_reduce_icon" format="reference" />
+        <attr name="csv_add_icon" format="reference" />
+        <attr name="csv_text_min_width" format="dimension" />
+        <attr name="csv_border_color" format="color" />
+        <attr name="csv_border_size" format="dimension" />
+        <attr name="csv_bg" format="color" />
+        <attr name="csv_icon_tint" format="color" />
+    </declare-styleable>
+
+    <!--ShadowLayout-->
+    <declare-styleable name="ShadowLayout">
+        <attr name="sl_background_color" format="color" />
+        <attr name="sl_shadow_dx" format="dimension" />
+        <attr name="sl_shadow_dy" format="dimension" />
+        <attr name="sl_shadow_color" format="color" />
+        <attr name="sl_shadow_size" format="dimension" />
+        <attr name="sl_radius" format="dimension" />
+        <attr name="sl_offset" format="dimension" />
+        <attr name="sl_direction" format="enum">
+            <enum name="none" value="0" />
+            <enum name="left" value="1" />
+            <enum name="top" value="2" />
+            <enum name="right" value="3" />
+            <enum name="bottom" value="4" />
+        </attr>
+    </declare-styleable>
+
+</resources>

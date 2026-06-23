@@ -1,0 +1,9 @@
+# 指定JDK版本（Android项目必配）
+jdk:
+  - openjdk17
+# 构建前执行脚本（可选，权限、环境准备）
+before_install:
+  - chmod +x gradlew
+# 核心：覆盖JitPack默认构建命令，执行你的自定义打包任务
+install:
+  - ./gradlew a-publishAndUploadLibrary -x test

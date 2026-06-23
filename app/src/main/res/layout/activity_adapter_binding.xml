@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.richard.library.basic.widget.ButtonView
+        android:id="@+id/btn_test"
+        android:text="刷新"
+        android:layout_margin="@dimen/content_item_margin"
+        style="@style/button_style"/>
+
+    <com.richard.library.basic.widget.refresh.BasicRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.richard.library.basic.widget.list.SRecyclerView
+            android:id="@+id/srv_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </com.richard.library.basic.widget.refresh.BasicRefreshLayout>
+
+</LinearLayout>

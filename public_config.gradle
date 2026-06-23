@@ -1,0 +1,343 @@
+import org.gradle.accessors.dm.LibrariesForLibs
+
+/**
+ * 引入依赖的时候需要在setting.gradle中配置maven {url "https://gitee.com/richard-x/android-maven-repo/raw/master"}
+ * 示例 com.richard.library:basic:4.5.8
+ */
+
+ext {
+    /*构建配置*/
+    buildConfigs = [
+            compileSdk         : 36,
+            minSdk             : 23,
+            targetSdk          : 36,
+            sourceCompatibility: JavaVersion.VERSION_17,
+            targetCompatibility: JavaVersion.VERSION_17,
+            jvmTarget          : 17
+    ]
+
+    /*要添加的对应cpu类型的.so库*/
+    abiFilters = ['arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64']
+
+    /*maven打包发布配置*/
+    //发布动作执行./gradlew build和./gradlew publish
+    maven_export = [
+            groupId       : 'com.richard.library',
+            version       : '4.7.6',
+            remoteRepoUrl : '',
+            username      : '',
+            password      : '',
+            localRepoPath : uri("${getDesktopPath()}/maven_repo"),
+            uploadUrl     : "https://gitee.com/richard-x/android-maven-repo.git",
+            taskName      : 'a-publishAndUploadLibrary',
+            isPushLibrary : false, //是否打包构建后自动将产物push到远程仓库
+            isPublishMode : true, //是否开启发布构建模式
+
+            //richard-context 需要最先打包构建
+            publishModules: [
+                    "richard-context",
+                    "richard-basic",
+                    "richard-bluetooth",
+                    "richard-compose-widget",
+                    "richard-log",
+                    "richard-media-selector",
+                    "richard-net",
+                    "richard-permission",
+                    "richard-port-connect",
+                    "richard-printer",
+                    "richard-security",
+                    "richard-simple-rx"
+            ]
+    ]
+
+    //引入模块基础依赖
+    applyBasicDependencies = { handler ->
+        def libs = project.extensions.getByType(LibrariesForLibs.class)
+        handler.implementation libs.junit
+        handler.androidTestImplementation libs.androidx.junit
+        handler.androidTestImplementation libs.androidx.espresso.core
+        handler.coreLibraryDesugaring libs.desugar.jdk.libs
+    }
+
+    //引入kotlin相关依赖
+    applyKotlinDependencies = { handler ->
+        def libs = project.extensions.getByType(LibrariesForLibs.class)
+        handler.implementation libs.androidx.core.ktx
+        handler.implementation libs.androidx.lifecycle.runtime.ktx
+    }
+
+    //引入compose依赖
+    applyComposeDependencies = { handler ->
+        def libs = project.extensions.getByType(LibrariesForLibs.class)
+        handler.implementation libs.androidx.activity.compose
+        handler.implementation handler.platform(libs.androidx.compose.bom)
+        handler.implementation libs.androidx.compose.ui.test.manifest
+        handler.implementation libs.androidx.compose.ui.test.junit4
+        handler.implementation libs.androidx.compose.ui
+        handler.implementation libs.androidx.compose.ui.graphics
+        handler.implementation libs.androidx.compose.ui.tooling
+        handler.implementation libs.androidx.compose.ui.tooling.preview
+        handler.implementation libs.androidx.compose.material3
+        handler.implementation libs.androidx.compose.foundation
+        handler.implementation libs.androidx.compose.foundation.layout
+        handler.implementation libs.androidx.navigation.compose
+        handler.implementation libs.androidx.navigation.runtime.ktx
+    }
+
+    //发布依赖库调用方法
+    /*configureMavenPublish(project) {
+        groupId = 'com.example'
+        artifactId = 'mylibrary'
+        version = '1.0.0'
+        url = 'http://your-maven-repo.com/repository/maven-releases/'
+        username = 'admin'
+        password = 'password'
+        isAndroidLibrary = true
+        variant = 'release'  // 可选，默认为release, debug/release/customVariant
+        // sourceTask = 'generateSourcesJar'  // 可选
+    }*/
+    configureMavenPublish = { project, Closure config ->
+        def configMap = [:]
+        config.resolveStrategy = Closure.DELEGATE_FIRST
+        config.delegate = configMap
+        config()
+
+        // 设置默认值
+        configMap.isAndroidLibrary = configMap.isAndroidLibrary != false
+        if (configMap.isAndroidLibrary) {
+            configMap.variant = configMap.variant ?: 'release'
+        }
+
+        project.apply plugin: 'maven-publish'
+
+        // 如果是Android库，创建源码jar任务
+        if (configMap.isAndroidLibrary) {
+            project.task('generateSourcesJar', type: Jar) {
+                from project.android.sourceSets.main.java.srcDirs
+                archiveClassifier = 'sources'
+            }
+        } else {
+            // 对于Java库，确保jar任务存在
+            if (!project.tasks.findByName('jar')) {
+                project.apply plugin: 'java'
+            }
+
+            // 为Java库创建源码jar任务
+            project.task('generateSourcesJar', type: Jar) {
+                from project.sourceSets.main.allSource
+                archiveClassifier = 'sources'
+            }
+        }
+
+        // 将整个publishing配置放在afterEvaluate中
+        project.afterEvaluate {
+            // 在afterEvaluate内部定义publishing配置
+            project.publishing {
+                publications {
+                    register("Production", MavenPublication) {
+                        groupId = configMap.groupId
+                        artifactId = configMap.artifactId
+                        version = configMap.version
+
+                        if (configMap.isAndroidLibrary) {
+                            // 对于Android库，使用变体的输出
+                            def variant = configMap.variant
+                            def variantCapitalized = variant.capitalize()
+
+                            // 方法1：通过变体API获取aar文件
+                            if (project.tasks.findByName("bundle${variantCapitalized}Aar")) {
+                                artifact project.tasks.getByName("bundle${variantCapitalized}Aar")
+                            }
+                            // 方法2：通过组件发布（更推荐）
+                            else if (project.components.findByName("android${variantCapitalized}")) {
+                                from project.components.findByName("android${variantCapitalized}")
+                            }
+                            // 方法3：从构建目录查找aar文件
+                            else {
+                                def aarFile = project.fileTree(dir: "${project.buildDir}/outputs/aar", include: ["*${variant}*.aar"]).singleFile
+                                if (aarFile?.exists()) {
+                                    artifact aarFile
+                                }
+                            }
+                        } else {
+                            // 普通Java库使用jar，但先检查是否存在
+                            if (project.tasks.findByName('jar')) {
+                                artifact project.tasks.getByName("jar")
+                            } else {
+                                // 如果jar任务不存在，尝试从组件发布
+                                from project.components.java
+                            }
+                        }
+
+                        // 上传源码
+                        if (configMap.sourceTask) {
+                            def sourceTask = project.tasks.findByName(configMap.sourceTask)
+                            if (sourceTask) {
+                                artifact(sourceTask)
+                            }
+                        } else if (project.tasks.findByName('generateSourcesJar')) {
+                            artifact project.tasks.getByName('generateSourcesJar')
+                        }
+
+                        // pom文件中声明依赖
+                        pom.withXml {
+                            def dependenciesNode = asNode().appendNode('dependencies')
+
+                            // 收集依赖
+                            def configurations = []
+                            if (configMap.isAndroidLibrary) {
+                                configurations.add(project.configurations.implementation)
+                                configurations.add(project.configurations.api)
+                            } else {
+                                configurations.add(project.configurations.compileClasspath)
+                            }
+
+                            configurations.each { configuration ->
+                                configuration.allDependencies.each { dep ->
+                                    if (dep.group != null && dep.name != null && dep.version != null &&
+                                            dep.name != 'unspecified' && !dep.name.contains('unspecified')) {
+                                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                                        dependencyNode.appendNode('groupId', dep.group)
+                                        dependencyNode.appendNode('artifactId', dep.name)
+                                        dependencyNode.appendNode('version', dep.version)
+                                        dependencyNode.appendNode('scope', 'implementation')
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                repositories {
+                    mavenLocal()
+                    maven {
+                        url = maven_export.localRepoPath
+                    }
+
+//                    maven {
+//                        url = configMap.url
+//                        credentials {
+//                            username = configMap.username
+//                            password = configMap.password
+//                        }
+//                    }
+                }
+            }
+        }
+    }
+}
+
+
+/**
+ * 获取当前电脑的桌面目录，兼容 Windows 和 macOS
+ */
+static String getDesktopPath() {
+    // 获取用户主目录（跨平台通用，最稳定）
+    def userHome = System.getProperty("user.home")
+    if (!userHome) {
+        throw new RuntimeException("无法获取用户主目录 user.home")
+    }
+
+    // 判断系统类型
+    def isWindows = System.getProperty("os.name").toLowerCase().contains("win")
+    def desktopDir
+
+    if (isWindows) {
+        // Windows：优先从环境变量取桌面（支持中文/自定义路径）
+        def windowsDesktop = System.getenv("USERPROFILE") + "\\Desktop"
+        desktopDir = new File(windowsDesktop)
+    } else {
+        // macOS / Linux：标准桌面路径
+        desktopDir = new File(userHome, "Desktop")
+    }
+
+    return desktopDir.absolutePath
+}
+
+/**
+ * 打印出当前电脑桌面路径
+ */
+tasks.register('printDesktop') {
+    doLast {
+        def desktop = getDesktopPath()
+        println "当前电脑桌面路径：$desktop"
+    }
+}
+
+/**
+ * 打包并上传依赖库产物到云端
+ */
+tasks.register(maven_export.taskName) {
+    doLast {
+        def version = maven_export.version
+
+        // ========== 1. 读取配置：待发布模块列表（按配置顺序执行） ==========
+        if (maven_export.publishModules.isEmpty()) {
+            println "❌ 未配置需要发布的子模块，请检查 maven_export.modules 配置"
+            return
+        }
+
+        println "==================== 开始按顺序发布AAR模块 ===================="
+        println "待发布模块列表(顺序)：${maven_export.publishModules}"
+
+        // 区分系统 gradle 命令
+        def isWindows = System.getProperty('os.name').toLowerCase().contains('win')
+        def gradleCmd = isWindows ? "gradlew.bat" : "./gradlew"
+
+        // ========== 2. 遍历模块，按顺序逐个执行 publish ==========
+        maven_export.publishModules.each { modulePath ->
+            println "\n------------------------------------------------"
+            println "正在发布模块：$modulePath"
+            println "------------------------------------------------"
+
+            // 进入对应子模块目录执行 publish
+            execCmd(rootProject.rootDir, "$gradleCmd ${modulePath}:publish")
+
+            println "✅ $modulePath 模块发布完成"
+        }
+
+        println "\n✅ 所有模块 publish 执行完成"
+
+        if (!maven_export.isPushLibrary) {
+            println "\n🎉 全部流程完成！版本：${version}"
+            return
+        }
+
+        println "\n✅ 开始上传产物到Git仓库"
+
+        // ========== 3. 原有 Git 上传逻辑（不变） ==========
+        def rootDir = new File(maven_export.localRepoPath)
+
+        println "=== 上传目录：${rootDir}"
+        println "=== 上传版本：${version}"
+
+        execCmd(rootDir, "git init")
+        execCmd(rootDir, "git remote remove origin")
+        execCmd(rootDir, "git remote add origin ${maven_export.uploadUrl}")
+        execCmd(rootDir, "git add .")
+        execCmd(rootDir, "git commit -m \"release ${version}\"")
+        execCmd(rootDir, "git push -u origin master --force")
+
+        println "\n🎉 全部流程完成！版本：$version"
+    }
+}
+
+
+/**
+ * 执行命令
+ */
+def execCmd(File dir, String cmd) {
+    try {
+        def process = cmd.execute(null, dir)
+        process.waitForProcessOutput(System.out, System.err)
+        def exitCode = process.exitValue()
+        if (exitCode == 0) {
+            println "✅ 执行成功(code = $exitCode)：$cmd"
+        } else {
+            throw new RuntimeException("执行失败(code = $exitCode)：$cmd")
+        }
+    } catch (Exception e) {
+        println "⚠️ 执行报错：$cmd"
+        throw e
+    }
+}

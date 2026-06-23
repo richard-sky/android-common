@@ -1,0 +1,89 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.maven.publish)
+}
+
+android {
+    namespace = 'com.richard.library.net'
+    compileSdk = buildConfigs.compileSdk
+
+    defaultConfig {
+        minSdk = buildConfigs.minSdk
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+        //multiDexEnabled = true
+
+        ndk {
+            rootProject.ext.abiFilters.each { abiFilters it }
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        //标志启用对新语言api的支持
+        coreLibraryDesugaringEnabled = true
+
+        sourceCompatibility = buildConfigs.sourceCompatibility
+        targetCompatibility = buildConfigs.targetCompatibility
+    }
+
+    buildFeatures {
+//        viewBinding = true
+//        dataBinding = true
+    }
+}
+
+dependencies {
+    applyBasicDependencies(this.dependencies)
+    api libs.androidx.recyclerview
+
+    //context
+    if (maven_export.isPublishMode) {
+        println("当前正在执行 ${maven_export.taskName} 任务")
+        implementation "${maven_export.groupId}:context:${maven_export.version}"
+    } else {
+        println("未执行 ${maven_export.taskName} 任务")
+        implementation project(':richard-context')
+    }
+
+    //http net（注意：最新版本值支持5.0以上系统，若需支持5.0以下版本请使用该retrofit版本）
+//    api('com.squareup.retrofit2:retrofit:2.7.2') {
+//        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+//    }
+
+    api 'com.squareup.retrofit2:retrofit:3.0.0'
+    api("com.squareup.okhttp3:okhttp:5.3.2")
+    //api("com.squareup.okhttp3:logging-interceptor:5.3.2")
+
+    api 'com.github.smart-fun:XmlToJson:1.5.3'
+
+    // 持久化 Cookie
+    //api 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
+
+    api 'commons-net:commons-net:3.13.0'
+    //api 'javax.activation:activation:1.1.1'
+}
+
+// 配置发布
+def maven_export = rootProject.ext.maven_export
+configureMavenPublish(project) {
+    groupId = maven_export.groupId
+    artifactId = 'net'
+    version = maven_export.version
+    url = maven_export.remoteRepoUrl
+    username = maven_export.username
+    password = maven_export.password
+    isAndroidLibrary = true
+    variant = 'release'
+}

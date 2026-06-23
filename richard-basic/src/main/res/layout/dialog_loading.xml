@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_loading_dialog_round_border"
+    android:minWidth="160dp"
+    android:minHeight="120dp">
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="end"
+        android:padding="4dp"
+        android:src="@mipmap/icon_close" />
+
+    <LinearLayout
+        android:id="@+id/content_root"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_loading"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:src="@mipmap/icon_loading"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="60s"
+            android:textColor="#DFD8D8"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:maxLines="3"
+            android:text="加载中"
+            android:textColor="#DFD8D8"
+            android:textSize="14sp" />
+    </LinearLayout>
+</FrameLayout>

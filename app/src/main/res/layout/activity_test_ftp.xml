@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="选择协议类型:"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <com.richard.library.basic.widget.ButtonView
+            android:id="@+id/btn_ftp"
+            style="@style/button_style"
+            android:layout_marginTop="@dimen/content_item_margin"
+            android:text="FTP" />
+
+        <com.richard.library.basic.widget.ButtonView
+            android:id="@+id/btn_ftps"
+            style="@style/button_style"
+            android:layout_marginTop="@dimen/content_item_margin"
+            android:text="FTPS" />
+
+        <com.richard.library.basic.widget.ButtonView
+            android:id="@+id/btn_tftp"
+            style="@style/button_style"
+            android:layout_marginTop="@dimen/content_item_margin"
+            android:text="TFTP" />
+
+    </LinearLayout>
+</layout>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!--android13适配-->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+    <!--副屏显示权限-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+
+    <application
+        android:name=".application.App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.App开发通用库"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m">
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activity.TestActivity" />
+        <activity android:name=".activity.TestFTPActivity" />
+        <activity android:name=".activity.TestBindingActivity" />
+        <activity android:name=".activity.TestAdapterBindingActivity" />
+        <activity android:name=".activity.TestPinnedActivity" />
+        <activity android:name=".activity.TestResultActivity" />
+        <activity android:name=".activity.TestARouterActivity" />
+        <activity android:name=".activity.TestPermissionActivity" />
+        <activity android:name=".activity.TestMVPActivity" />
+        <activity android:name=".activity.TestRequestActivity" />
+        <activity android:name=".activity.TestMVVMActivity" />
+        <activity android:name=".activity.TestSlideActivity" />
+        <activity android:name=".activity.TestTreeActivity" />
+        <activity android:name=".activity.printer.TestPrinterActivity" />
+        <activity android:name=".activity.TestPictureSelectorActivity" />
+        <activity android:name=".activity.Cron4jActivity" />
+        <activity android:name="com.richard.library.basic.web.WebActivity" />
+
+        <!--crash 日志浏览-->
+        <activity
+            android:name="com.richard.library.basic.crash.CrashReportActivity"
+            android:exported="false" />
+
+    </application>
+
+</manifest>

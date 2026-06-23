@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:padding="@dimen/content_padding"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.richard.library.basic.widget.ButtonView
+            android:id="@+id/btn_select_ble"
+            style="@style/button_style"
+            android:text="选择蓝牙设备" />
+
+        <com.richard.library.basic.widget.ButtonView
+            android:id="@+id/btn_test_print"
+            android:layout_marginTop="@dimen/content_item_margin"
+            style="@style/button_style"
+            android:text="测试小票打印"/>
+
+        <com.richard.library.basic.widget.ButtonView
+            android:id="@+id/btn_test_serial"
+            android:layout_marginTop="@dimen/content_item_margin"
+            style="@style/button_style"
+            android:text="测试串口"/>
+
+        <com.richard.library.basic.widget.ButtonView
+            android:id="@+id/btn_test_honeywell_print"
+            android:layout_marginTop="@dimen/content_item_margin"
+            style="@style/button_style"
+            android:text="测试霍尼韦尔标签打印" />
+
+    </LinearLayout>
+</layout>

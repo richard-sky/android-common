@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <translate
+        android:fromYDelta="0"
+        android:toYDelta="0"
+        android:duration="300"
+        />
+    <!-- (注意这里的时间要比上面两个的长，否则会出现黑色背景)-->
+</set>
+
+<!--    1、第一个 Activity 通过 Intent 意图打开第二个新 Activity 的弹出动画设置：-->
+<!--    在 startActivity 后添加 overridePendingTransition(R.anim.activity_bottom_enter,R.anim.activity_bottom_silent) 方法-->
+
+<!--    2、新 Activity 被关闭返回第一个 Activity 的退出动画设置：-->
+<!--    重写finish()-->
+<!--    @Override-->
+<!--    public void finish() {-->
+<!--    super.finish();-->
+<!--    overridePendingTransition(R.anim.activity_bottom_silent,R.anim.activity_bottom_exit);-->
+<!--    }-->

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--theme-->
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">@color/blue</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <!--主色-->
+    <color name="main">#2C2F32</color>
+
+    <!--界面背景色-->
+    <color name="bg">#2C2F32</color>
+
+    <!--内容或卡片布局的背景色-->
+    <color name="content_bg">#3C3F42</color>
+
+    <!--pinned section 背景颜色-->
+    <color name="section_bg">#464B50</color>
+
+    <!--item项选中背景颜色-->
+    <color name="selected_bg">#3E4750</color>
+
+    <!--vip文本颜色-->
+    <color name="vip_text">#A5864B</color>
+
+    <!--文本标签背景颜色-->
+    <color name="label_bg">#E5E5E5</color>
+
+    <!--图片控件无图片时的背景颜色-->
+    <color name="image_view_bg">#c9c9c9</color>
+
+    <!--按下和放开的背景颜色-->
+    <color name="content_item_un_press_bg">#3C3F42</color>
+    <color name="content_item_pressed_bg">#313336</color>
+
+    <!--按键按下和放开的背影颜色-->
+    <color name="button_un_press_bg">#009688</color>
+    <color name="button_pressed_bg">#065C54</color>
+    <color name="button_text">@color/white</color>
+
+    <!--PromptDialog按钮颜色-->
+    <color name="prompt_dialog_button_un_press_bg">@color/bg</color>
+    <color name="prompt_dialog_button_pressed_bg">#242527</color>
+
+    <!--PopupMenu按钮按下和放开的背影颜色-->
+    <color name="popupmenu_button_un_press_bg">@color/bg</color>
+    <color name="popupmenu_button_pressed_bg">#242527</color>
+
+    <!--按钮禁用状态背景颜色-->
+    <color name="button_disabled_bg">#c9c9c9</color>
+
+    <!--阴影颜色-->
+    <color name="shadow">#F8D6D3D3</color>
+
+    <!--线条颜色-->
+    <color name="light_line">#403B3B</color>
+    <color name="dark_line">#403B3B</color>
+
+    <!--字体颜色-->
+    <color name="text">#E6E6E6</color>
+    <color name="text_hint">#999797</color>
+    <color name="label_text">#5F616E</color>
+    <color name="gray_text">#737373</color>
+    <color name="gray_light_text">#cecece</color>
+    <color name="dark_gray_text">#464646</color>
+    <color name="green_text">#399e20</color>
+
+    <!--基本色-->
+    <color name="transparent">#00000000</color>
+    <color name="dark_gray">#27292c</color>
+    <color name="light_gray">#F5F5F5</color>
+    <color name="gray">#999999</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="red">#F12D31</color>
+    <color name="yellow">#FF9A00</color>
+    <color name="green">#20B95A</color>
+    <color name="blue">#2196F3</color>
+
+    <!--ToastUtil-->
+    <color name="defaultTextColor">#FFFFFF</color>
+    <color name="errorColor">#D50000</color>
+    <color name="infoColor">#3F51B5</color>
+    <color name="normalColor">#353A3E</color>
+    <color name="successColor">#388E3C</color>
+    <color name="warningColor">#FF6D00</color>
+
+</resources>

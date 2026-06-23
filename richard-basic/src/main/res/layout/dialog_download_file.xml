@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.richard.library.basic.widget.NavigationBar
+            android:id="@+id/navigation_bar"
+            app:nav_topLeftRadius="@dimen/radius_value"
+            app:nav_topRightRadius="@dimen/radius_value"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/navigation_bar_height" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="文件名称"
+                android:textColor="@color/text"
+                android:textSize="@dimen/textSize_16"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_file_size"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="文件大小 : 12.6M"
+                android:textColor="@color/text"
+                android:textSize="@dimen/textSize_12" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/content_file_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                </LinearLayout>
+
+                <ScrollView
+                    android:id="@+id/osv_file_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="20dp">
+
+                    <TextView
+                        android:id="@+id/tv_file_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="7dp"
+                        android:text="1.新增余额生息功能\n2.新增查看收款返佣和商品收益列表\n3.优化调整部分UI"
+                        android:textColor="@color/text"
+                        android:textSize="@dimen/textSize_12" />
+
+                </ScrollView>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_file_progress_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tv_progress_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="正在下载文件..."
+                        android:textColor="@color/text"
+                        android:textSize="@dimen/textSize_14" />
+
+                    <ProgressBar
+                        android:id="@+id/progressbar"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_marginTop="10dp"
+                        android:max="100"
+                        android:progressDrawable="@drawable/layer_list_progress_drawable" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/line_view"
+                    style="@style/line_horizontal_gray_style"
+                    android:layout_marginTop="15dp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_app_upgrade_bv_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <com.richard.library.basic.widget.ButtonView
+                        android:id="@+id/bv_cancel"
+                        style="@style/button_line_style.wrap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/small_button_height"
+                        android:text="取消"
+                        android:textSize="@dimen/textSize_14" />
+
+                    <View
+                        android:id="@+id/view_app_upgrade_offset"
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent" />
+
+                    <com.richard.library.basic.widget.ButtonView
+                        android:id="@+id/bv_download"
+                        style="@style/button_style.wrap"
+                        android:layout_height="@dimen/small_button_height"
+                        android:text="下载"
+                        android:textSize="@dimen/textSize_14" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

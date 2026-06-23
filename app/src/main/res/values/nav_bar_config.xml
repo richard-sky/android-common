@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--导航条背景颜色-->
+    <color name="navigation_bar_backcolor">@color/main</color>
+
+    <!--导航条文本颜色-->
+    <color name="navigation_text_color">@color/text</color>
+
+    <!--导航条底部线条颜色-->
+    <color name="navigation_bottom_line_color">@color/dark_line</color>
+
+    <!--左边ImageView tint，完全透明色代表不应用tint颜色-->
+    <color name="navigation_left_image_tint">@color/transparent</color>
+
+    <!--右边ImageView tint，完全透明色代表不应用tint颜色-->
+    <color name="navigation_right_image_tint">@color/transparent</color>
+
+    <!--导航条底部线条大小-->
+    <dimen name="navigation_bottom_line_size">0.5dp</dimen>
+
+    <!--导航条title文本大小-->
+    <dimen name="navigation_bar_title_text_size">16sp</dimen>
+
+    <!--导航条高度-->
+    <dimen name="navigation_bar_height">40dp</dimen>
+
+    <!--导航条title是否加粗-->
+    <bool name="navigation_bar_title_bold">false</bool>
+
+    <!--是否显示底部线条-->
+    <!--visible : 0-->
+    <!--invisible : 1-->
+    <!--gone : 2-->
+    <integer name="navigation_bar_bottom_line_show">0</integer>
+
+    <!--是否开启沉侵式状态栏-->
+    <bool name="navigation_bar_open_translucent_bar">true</bool>
+</resources>

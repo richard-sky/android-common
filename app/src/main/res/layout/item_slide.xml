@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:background="@color/green"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="-81dp"
+        android:paddingLeft="-80dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/item_tv"
+            android:layout_alignParentTop="true"
+            android:background="#885900"
+            android:textColor="#ffffff"
+            android:text="修改"
+            android:clickable="true"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/item_tv"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:text="我是文字"
+            android:padding="16dp"
+            />
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/item_tv"
+            android:layout_alignParentTop="true"
+            android:background="#ff0000"
+            android:textColor="#ffffff"
+            android:text="删除"
+            android:clickable="true"
+            android:gravity="center"
+            />
+
+
+    </RelativeLayout>
+</layout>

@@ -1,0 +1,52 @@
+pluginManagement {
+    repositories {
+        maven { url = 'https://maven.aliyun.com/repository/gradle-plugin' }
+        google{
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenLocal()
+
+        //阿里云仓库(https://developer.aliyun.com/mvn/guide)
+        maven { url = 'https://maven.aliyun.com/repository/public/' }
+        maven { url = 'https://maven.aliyun.com/repository/central' }
+        maven { url = 'https://maven.aliyun.com/repository/apache-snapshots' }
+
+        maven {url = 'https://gitee.com/richard-x/android-maven-repo/raw/master'}
+
+        //jcenter()
+        google()
+        mavenCentral()
+        maven { url = "https://jitpack.io" }
+    }
+}
+
+rootProject.name = "Android开发库"
+include ':app'
+include ':richard-context'
+include ':richard-basic'
+include ':richard-security'
+include ':richard-permission'
+include ':richard-printer'
+include ':richard-media-selector'
+include ':richard-net'
+include ':richard-simple-rx'
+include ':richard-port-connect'
+include ':richard-bluetooth'
+include ':richard-log'
+include ':richard-compose-widget'

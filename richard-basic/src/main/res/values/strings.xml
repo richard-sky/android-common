@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">common_lib</string>
+    <!--promtDialog-->
+    <string name="dialog_title">提示</string>
+    <string name="dialog_cancel_label">取消</string>
+    <string name="dialog_confirm_label">确定</string>
+    <string name="toast_operate_fail">操作失败</string>
+    <string name="add_image">添加</string>
+
+    <!--ToastUtil-->
+    <string name="toast_message">toast_message</string>
+</resources>

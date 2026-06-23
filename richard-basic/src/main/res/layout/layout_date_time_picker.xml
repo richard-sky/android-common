@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.richard.library.basic.widget.NavigationBar
+            android:id="@+id/navigation_bar"
+            app:nav_topLeftRadius="@dimen/radius_value"
+            app:nav_topRightRadius="@dimen/radius_value"
+            app:nav_title_text="时间选择"
+            app:nav_right_text="确定"
+            app:nav_left_text="取消"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/navigation_bar_height"/>
+
+        <LinearLayout
+            android:id="@+id/content_root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <DatePicker
+                android:id="@+id/date_picker"
+                android:theme="@style/date_picker_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner" />
+
+            <TimePicker
+                android:id="@+id/time_picker"
+                android:theme="@style/time_picker_style"
+                android:numbersSelectorColor="@color/red"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:timePickerMode="spinner" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

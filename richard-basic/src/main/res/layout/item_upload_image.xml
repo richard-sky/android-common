@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="78dp">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/riv_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            app:riv_corner_radius="4dp"
+            android:src="@color/light_gray" />
+
+        <ImageView
+            android:id="@+id/iv_video_play"
+            android:visibility="gone"
+            android:layout_margin="17dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/ic_play_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_label"
+            style="@style/text_style"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:drawableTop="@mipmap/ic_add_image"
+            android:drawablePadding="@dimen/drawable_padding"
+            android:text="@string/add_image"
+            android:textColor="@color/gray_text"
+            android:textSize="@dimen/textSize_10" />
+
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@mipmap/icon_gray_round_delete" />
+
+    </RelativeLayout>
+</layout>

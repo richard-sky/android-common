@@ -1,0 +1,172 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
+}
+
+android {
+    namespace = 'com.richard.dev.common'
+    compileSdk = buildConfigs.compileSdk
+
+    defaultConfig {
+        applicationId = "com.richard.dev.common"
+        minSdk = buildConfigs.minSdk
+        targetSdk = buildConfigs.targetSdk
+        versionCode = 1
+        versionName = "1.0"
+        multiDexEnabled = true
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        //Arouter
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+
+        ndk {
+            rootProject.ext.abiFilters.each { abiFilters it }
+        }
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs('src/main/res', 'src/main/res_core')
+        }
+    }
+
+    //签名配置
+    signingConfigs {
+        debugConfig {
+            keyAlias = "common"
+            keyPassword = "123456"
+            storeFile = file("./apk_sign.jks")
+            storePassword = "123456"
+        }
+        releaseConfig {
+            keyAlias = "common"
+            keyPassword = "123456"
+            storeFile = file("./apk_sign.jks")
+            storePassword = "123456"
+        }
+        debug {
+            enableV1Signing = true
+            enableV2Signing = true
+            enableV3Signing = true
+            enableV4Signing = true
+        }
+        release {
+            enableV1Signing = true
+            enableV2Signing = true
+            enableV3Signing = true
+            enableV4Signing = true
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig = signingConfigs.debugConfig
+            minifyEnabled = false
+            zipAlignEnabled = false
+            shrinkResources = false
+            debuggable = true
+            jniDebuggable = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            signingConfig = signingConfigs.releaseConfig
+            minifyEnabled = false
+            zipAlignEnabled = false
+            shrinkResources = false
+            debuggable = false
+            jniDebuggable = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        //标志启用对新语言api的支持
+        coreLibraryDesugaringEnabled = true
+
+        sourceCompatibility = buildConfigs.sourceCompatibility
+        targetCompatibility = buildConfigs.targetCompatibility
+    }
+
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+        dataBinding = true
+        compose = true
+    }
+
+    // 打包 start
+//    applicationVariants.configureEach { variant ->
+//        variant.outputs.configureEach {
+//            def date = new Date()
+//            def formattedDate = date.format('yyyyMMddHHmm')
+//
+//            if (variant.buildType.name == 'release') {
+//                def envFlag = variant.buildType.name
+//                //设置输出apk文件名称
+//                outputFileName = "richard_${envFlag}_" +
+//                        "${android.defaultConfig.applicationId}_" +
+//                        "v${variant.mergedFlavor.versionName}_" +
+//                        "${variant.mergedFlavor.versionCode}_" +
+//                        "${formattedDate}.apk";
+//
+//                def apkPath = org.gradle.internal.os.OperatingSystem.current().isWindows()
+//                        ? "C:/Users/Lenovo/Desktop/apk-output/${android.defaultConfig.applicationId}"
+//                        : "/Users/richard/Desktop/apk-output/${android.defaultConfig.applicationId}";
+//
+//                // 设置apk的输出路径
+//                variant.getPackageApplicationProvider().get().outputDirectory = new File(apkPath)
+//
+//                // 清除之前生成的APK文件
+//                delete fileTree(dir: apkPath, include: ['*.apk'])
+//            }
+//        }
+//    }
+    // 打包 end
+}
+
+dependencies {
+    applyBasicDependencies(this.dependencies)
+    applyKotlinDependencies(this.dependencies)
+    applyComposeDependencies(this.dependencies)
+
+    implementation project(path: ':richard-context')
+    implementation project(path: ':richard-basic')
+    implementation project(path: ':richard-compose-widget')
+    implementation project(path: ':richard-permission')
+    implementation project(path: ':richard-security')
+    implementation project(path: ':richard-printer')
+    implementation project(path: ':richard-port-connect')
+    implementation project(path: ':richard-media-selector')
+    implementation project(path: ':richard-net')
+    implementation project(path: ':richard-simple-rx')
+    implementation project(path: ':richard-bluetooth')
+    implementation project(path: ':richard-log')
+
+    //refresh-header
+    implementation 'io.github.scwang90:refresh-header-material:2.1.1'
+
+    //dpi适配
+    implementation 'me.jessyan:autosize:1.2.1'
+
+    //ARouter(界面路由)
+    implementation 'com.alibaba:arouter-api:1.5.2'
+    annotationProcessor 'com.alibaba:arouter-compiler:1.5.2'
+
+    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.7'
+    annotationProcessor "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.2"
+
+    //rabitmq
+    implementation 'com.rabbitmq:amqp-client:5.12.0'
+
+    //mqtt
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.2'
+    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:3.0-alpha-1'
+}

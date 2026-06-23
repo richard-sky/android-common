@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:orientation="vertical">
+
+    <com.richard.library.basic.widget.webview.ReWebView
+        android:id="@+id/web_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_html_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="@dimen/text_line_margin"
+            android:padding="@dimen/content_item_padding_left_right"
+            android:text="富文本内容"
+            android:textColor="@color/text"
+            android:textSize="@dimen/textSize_13"
+            android:visibility="gone" />
+
+    </ScrollView>
+
+
+</LinearLayout>

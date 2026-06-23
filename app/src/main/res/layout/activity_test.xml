@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.richard.library.basic.widget.ButtonView
+            android:id="@+id/bv_btn"
+            style="@style/button_style"
+            android:layout_margin="@dimen/content_item_margin"
+            android:text="测试1" />
+
+        <com.richard.library.basic.widget.ButtonView
+            android:id="@+id/bv_btn2"
+            style="@style/button_style"
+            android:layout_margin="@dimen/content_item_margin"
+            android:text="测试2" />
+
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/content_item_margin"
+            android:text="@string/test_language" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+</layout>

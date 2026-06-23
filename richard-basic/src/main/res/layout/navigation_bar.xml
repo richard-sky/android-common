@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        android:id="@+id/content_nav"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/navigation_bar_iv_left"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@mipmap/icon_back"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/navigation_bar_tv_left"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/navigation_text_color"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/navigation_bar_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="90dp"
+            android:layout_marginRight="90dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:textColor="@color/navigation_text_color"
+            android:textSize="@dimen/navigation_bar_title_text_size"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:id="@+id/navigation_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="6dp"
+            android:visibility="gone" />
+
+
+        <LinearLayout
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/navigation_bar_iv_right"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/navigation_bar_tv_right"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/navigation_text_color"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <View
+        android:id="@+id/navigation_bar_bottom_line"
+        android:visibility="@integer/navigation_bar_bottom_line_show"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/navigation_bottom_line_size"
+        android:background="@color/navigation_bottom_line_color" />
+
+</merge>

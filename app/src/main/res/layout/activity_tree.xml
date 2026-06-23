@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:padding="@dimen/content_padding"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.richard.library.basic.widget.ButtonView
+            android:id="@+id/btn_confirm"
+            android:text="获取结果"
+            style="@style/button_style"/>
+
+        <com.richard.library.basic.widget.list.SRecyclerView
+            android:id="@+id/srv_view"
+            android:layout_marginTop="20dp"
+            app:srv_divider_size="7dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+</layout>

@@ -1,0 +1,25 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+
+    <application>
+
+        <provider
+            android:name=".provider.AppUpdateFileProvider"
+            android:authorities="${applicationId}.AppUpdateFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:name,android:authorities,android:exported,android:grantUriPermissions">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/app_update_provider_path"
+                tools:replace="android:name,android:resource" />
+        </provider>
+
+    </application>
+
+</manifest>

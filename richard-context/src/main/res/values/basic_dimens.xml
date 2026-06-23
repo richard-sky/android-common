@@ -1,0 +1,51 @@
+<resources>
+    <dimen name="drawable_padding">9dp</dimen>
+    <dimen name="content_item_padding_left_right">10dp</dimen>
+    <dimen name="content_padding">10dp</dimen>
+    <dimen name="content_item_margin">6dp</dimen>
+    <dimen name="list_item_margin">5dp</dimen>
+    <dimen name="content_input_padding">19dp</dimen>
+
+    <dimen name="big_radius_value">10dp</dimen>
+    <dimen name="radius_value">4dp</dimen>
+    <dimen name="line_size">1dp</dimen>
+
+    <dimen name="button_loading_size">20dp</dimen>
+    <dimen name="normal_button_height">45dp</dimen>
+    <dimen name="middle_button_height">35dp</dimen>
+    <dimen name="small_button_height">30dp</dimen>
+    <dimen name="button_margin_top">17dp</dimen>
+
+    <dimen name="content_item_height">45dp</dimen>
+    <dimen name="content_small_item_height">30dp</dimen>
+    <dimen name="edit_text_height">45dp</dimen>
+    <dimen name="edit_text_small_height">35dp</dimen>
+    <dimen name="edit_text_view_textSize">16sp</dimen>
+
+    <dimen name="button_text_size">16sp</dimen>
+    <dimen name="radio_button_text_size">15sp</dimen>
+    <dimen name="text_view_textSize">16sp</dimen>
+    <dimen name="text_view_padding">15dp</dimen>
+
+    <dimen name="textSize_21">20sp</dimen>
+    <dimen name="textSize_20">20sp</dimen>
+    <dimen name="textSize_19">19sp</dimen>
+    <dimen name="textSize_18">18sp</dimen>
+    <dimen name="textSize_17">17sp</dimen>
+    <dimen name="textSize_16">16sp</dimen>
+    <dimen name="textSize_15">15sp</dimen>
+    <dimen name="textSize_14">14sp</dimen>
+    <dimen name="textSize_13">13sp</dimen>
+    <dimen name="textSize_12">12sp</dimen>
+    <dimen name="textSize_11">11sp</dimen>
+    <dimen name="textSize_10">10sp</dimen>
+    <dimen name="textSize_9">9sp</dimen>
+
+    <dimen name="item_padding">5dp</dimen>
+    <dimen name="text_line_margin">3dp</dimen>
+
+
+    <!-- 间距 -->
+    <dimen name="margin_left_right">10dp</dimen>
+    <dimen name="margin_top_bottom">10dp</dimen>
+</resources>

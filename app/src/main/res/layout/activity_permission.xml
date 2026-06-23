@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="动态权限获取"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.richard.library.basic.widget.ButtonView
+        android:id="@+id/bv_get1"
+        android:text="存储权限获取(注解方式)"
+        android:layout_margin="@dimen/content_item_margin"
+        style="@style/button_style"/>
+
+    <com.richard.library.basic.widget.ButtonView
+        android:id="@+id/bv_get2"
+        android:text="存储权限获取(代码方式)"
+        android:layout_margin="@dimen/content_item_margin"
+        style="@style/button_style"/>
+
+</LinearLayout>
