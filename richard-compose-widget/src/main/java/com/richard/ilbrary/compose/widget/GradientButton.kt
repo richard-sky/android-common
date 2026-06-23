@@ -93,7 +93,7 @@ fun PreviewGradientButtonUI() {
  */
 @Composable
 fun GradientButton(
-    modifier: Modifier = Modifier,
+    modifier: Modifier? = null,
     text: String,
     enabled: Boolean = true,
     width: Dp? = null,
@@ -145,7 +145,7 @@ fun GradientButton(
         label = "textColor"
     )
 
-    var finalModifier = modifier
+    var finalModifier = (modifier?: Modifier)
         .height(height = height)
         .graphicsLayer(scaleX = scale, scaleY = scale)
 
@@ -293,7 +293,7 @@ fun GradientButton(
             OutlinedButton(
                 onClick = onClick,
                 enabled = enabled,
-                modifier = if (width.isNull()) Modifier.fillMaxHeight() else Modifier.fillMaxSize(),
+                modifier = if (width.isNull() && modifier.isNull()) Modifier.fillMaxHeight() else Modifier.fillMaxSize(),
                 interactionSource = interactionSource,
                 shape = shape,
                 // 把 Button 默认背景设为透明
@@ -317,7 +317,7 @@ fun GradientButton(
             Button(
                 onClick = onClick,
                 enabled = enabled,
-                modifier = if (width.isNull()) Modifier.fillMaxHeight() else Modifier.fillMaxSize(),
+                modifier = if (width.isNull() && modifier.isNull()) Modifier.fillMaxHeight() else Modifier.fillMaxSize(),
                 interactionSource = interactionSource,
                 shape = shape,
                 // 把 Button 默认背景设为透明

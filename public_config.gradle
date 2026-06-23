@@ -31,7 +31,7 @@ ext {
             uploadUrl     : "https://gitee.com/richard-x/android-maven-repo.git",
             taskName      : 'a-publishAndUploadLibrary',
             isPushLibrary : false, //是否打包构建后自动将产物push到远程仓库
-            isPublishMode : true, //是否开启发布构建模式
+            isPublishMode : false, //是否开启发布构建模式
 
             //richard-context 需要最先打包构建
             publishModules: [

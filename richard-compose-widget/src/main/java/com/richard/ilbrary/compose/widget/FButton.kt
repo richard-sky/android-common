@@ -57,7 +57,7 @@ fun PreviewFButtonViewUI() {
  */
 @Composable
 fun FButton(
-    modifier: Modifier = Modifier,
+    modifier: Modifier? = null,
     text: String,
     enabled: Boolean = true,
     width: Dp? = null,

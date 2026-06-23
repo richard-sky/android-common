@@ -21,12 +21,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
 import com.richard.ilbrary.compose.widget.data.DialogButton
 import com.richard.ilbrary.compose.widget.type.Direction
 import com.richard.library.compose.widget.R
@@ -58,6 +61,7 @@ import com.richard.library.context.util.isNull
  * @param contentSpace 标题与内容间距
  * @param buttonTopSpace 内容与按钮间距
  * @param outsideClickDismiss 点击外部/返回键是否允许关闭弹窗
+ * @param showBackMask 是否显示Dialog蒙版背景
  * @param onDismiss 弹窗关闭回调（无退场动画，立即执行）
  * @param content 弹窗自定义内容区域
  */
@@ -73,13 +77,14 @@ fun ContentDialog(
         color = colorResource(R.color.text),
         fontWeight = FontWeight.Medium
     ),
-    buttonList: List<DialogButton>,
+    buttonList: List<DialogButton>? = null,
     buttonArrangement: Arrangement.Horizontal = Arrangement.End,
     dialogCorner: Dp = dimensionResource(R.dimen.big_radius_value),
     dialogSpace: Dp = dimensionResource(R.dimen.content_padding),
     contentSpace: Dp = 14.dp,
     buttonTopSpace: Dp = 30.dp,
     outsideClickDismiss: Boolean = true,
+    showBackMask: Boolean = true,
     onDismiss: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -113,9 +118,17 @@ fun ContentDialog(
         properties = DialogProperties(
             dismissOnBackPress = outsideClickDismiss,
             dismissOnClickOutside = outsideClickDismiss,
-            usePlatformDefaultWidth = modifier.isNull()
+            usePlatformDefaultWidth = modifier.isNull(),
         )
     ) {
+
+        if (!showBackMask) {
+            val windowProvider = LocalView.current.parent as? DialogWindowProvider
+            SideEffect {
+                windowProvider?.window?.setDimAmount(0f)
+            }
+        }
+
         AnimatedVisibility(
             visible = animVisible,
             enter = fadeIn(tween(220, easing = FastOutSlowInEasing)) +
@@ -155,7 +168,7 @@ fun ContentDialog(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = buttonArrangement
                     ) {
-                        buttonList.forEachIndexed { index, button ->
+                        buttonList?.forEachIndexed { index, button ->
                             if (index > 0) {
                                 Spacer(modifier = Modifier.width(dimensionResource(R.dimen.content_item_margin)))
                             }
@@ -166,7 +179,8 @@ fun ContentDialog(
                                 textColor = button.textColor,
                                 isOutlinedButton = button.isOutline,
                                 width = button.width,
-                                height = button.height ?: dimensionResource(R.dimen.middle_button_height),
+                                height = button.height
+                                    ?: dimensionResource(R.dimen.middle_button_height),
                                 horizontalPadding = button.horizontalPadding,
                                 onClick = {
                                     if (button.onClick == null) {
