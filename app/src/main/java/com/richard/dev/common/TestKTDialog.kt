@@ -2,9 +2,16 @@ package com.richard.dev.common
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -14,15 +21,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.richard.ilbrary.compose.widget.FButton
+import com.richard.ilbrary.compose.widget.FTextField
 import com.richard.ilbrary.compose.widget.TipDialog
 import com.richard.ilbrary.compose.widget.data.DialogButton
+import com.richard.ilbrary.compose.widget.data.FocusStyle
 import com.richard.ilbrary.compose.widget.util.defaultDialogWidth
 import com.richard.library.basic.basic.BasicDialog
 
@@ -102,6 +114,18 @@ fun HomePage(navController: NavHostController) {
     ) {
 
         val showDialog = remember { mutableStateOf(false) }
+
+        FTextField(
+            innerFocusStyle = FocusStyle.Main,
+            labelText = "物品类别",
+            hintText = "请输入物品类别",
+        )
+
+        FTextField(
+            innerFocusStyle = FocusStyle.Border,
+            labelText = "物品名称",
+            hintText = "请输入名称",
+        )
 
         FButton(text = "弹出确认框", height = 50.dp, isOutlinedButton = true) {
             showDialog.value = true
