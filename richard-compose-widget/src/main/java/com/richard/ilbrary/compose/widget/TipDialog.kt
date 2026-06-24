@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -35,6 +36,8 @@ import com.richard.library.compose.widget.R
  * @param contentSpace 标题与内容之间间距
  * @param buttonTopSpace 内容与按钮区域间距
  * @param outsideClickDismiss 点击弹窗外部是否关闭
+ * @param dialogAlignment Dialog显示位置
+ * @param onShow 弹窗显示回调
  * @param onDismiss 弹窗关闭回调
  */
 @Composable
@@ -57,15 +60,16 @@ fun TipDialog(
     ),
     buttonList: List<DialogButton>,
     buttonArrangement: Arrangement.Horizontal = Arrangement.End,
+    dialogBgColor: Color = colorResource(R.color.bg),
     dialogCorner: Dp = dimensionResource(R.dimen.big_radius_value),
     dialogSpace: Dp = dimensionResource(R.dimen.content_padding),
     contentSpace: Dp = dimensionResource(R.dimen.content_padding),
     buttonTopSpace: Dp = dimensionResource(R.dimen.button_margin_top),
     outsideClickDismiss: Boolean = true,
+    dialogAlignment: Alignment = Alignment.Center,
+    onShow: (() -> Unit)? = null,
     onDismiss: (() -> Unit)? = null
 ) {
-    if (!show.value) return
-
     ContentDialog(
         modifier = modifier,
         show = show,
@@ -75,11 +79,14 @@ fun TipDialog(
         titleTextStyle = titleTextStyle,
         buttonList = buttonList,
         buttonArrangement = buttonArrangement,
+        dialogBgColor = dialogBgColor,
         dialogCorner = dialogCorner,
         dialogSpace = dialogSpace,
         contentSpace = contentSpace,
         buttonTopSpace = buttonTopSpace,
         outsideClickDismiss = outsideClickDismiss,
+        dialogAlignment = dialogAlignment,
+        onShow = onShow,
         onDismiss = onDismiss,
     ) {
         Text(

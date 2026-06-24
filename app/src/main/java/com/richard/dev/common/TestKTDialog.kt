@@ -8,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,6 +35,7 @@ import androidx.navigation.compose.rememberNavController
 import com.richard.ilbrary.compose.widget.DropdownMenu
 import com.richard.ilbrary.compose.widget.FButton
 import com.richard.ilbrary.compose.widget.FTextField
+import com.richard.ilbrary.compose.widget.LoadingDialog
 import com.richard.ilbrary.compose.widget.TipDialog
 import com.richard.ilbrary.compose.widget.data.DialogButton
 import com.richard.ilbrary.compose.widget.data.FocusStyle
@@ -115,36 +117,15 @@ fun HomePage(navController: NavHostController) {
         verticalArrangement = Arrangement.Center
     ) {
 
-        Box(contentAlignment = Alignment.Center) {
-            DropdownMenu(
-                labelText = "请选择",
-                options = listOf(
-                    "选项1",
-                    "选项2",
-                    "选项3",
-                    "选项4",
-                    "选项5",
-                    "选项6",
-                    "选项7",
-                    "选项8",
-                    "选项9",
-                    "选项10"
-                ),
-                selectedIndex = null,
-                onValueChange = {},
-                onOptionSelect = {},
-                isEditTextMode = false,
-                cornerRadius = 6.dp,
-                borderColor = Color(0xFFDDDDDD),
-                displayText = { it },
-            )
-        }
-
         val showDialog = remember { mutableStateOf(false) }
 
         FButton(text = "弹出确认框", height = 50.dp, isOutlinedButton = true) {
             showDialog.value = true
         }
+
+//        LoadingDialog(showDialog)
+
+        Spacer(Modifier.height(100.dp))
 
         TipDialog(
             modifier = Modifier.defaultDialogWidth(),
@@ -152,6 +133,12 @@ fun HomePage(navController: NavHostController) {
             title = "操作提示",
             titleIconId = R.mipmap.ic_tree_checked,
             message = "确定要执行该操作吗？",
+            onShow = {
+                Log.d("testtt", "showDialog-> onShow")
+            },
+            onDismiss = {
+                Log.d("testtt", "showDialog-> onDismiss")
+            },
             buttonList = listOf(
                 DialogButton(text = "取消", isOutline = true),
                 DialogButton(text = "确定")

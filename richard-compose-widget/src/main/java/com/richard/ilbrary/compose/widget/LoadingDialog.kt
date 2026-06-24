@@ -50,7 +50,6 @@ fun LoadingDialog(
         showBackMask = showBackMask,
         dialogBgColor = bgColor
     ) {
-
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,

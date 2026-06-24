@@ -8,11 +8,15 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,6 +43,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -70,6 +75,8 @@ import com.richard.library.context.util.isNull
  * @param buttonTopSpace 内容与按钮间距
  * @param outsideClickDismiss 点击外部/返回键是否允许关闭弹窗
  * @param showBackMask 是否显示Dialog蒙版背景
+ * @param dialogAlignment Dialog显示位置
+ * @param onShow 弹窗显示回调（无退场动画，立即执行）
  * @param onDismiss 弹窗关闭回调（无退场动画，立即执行）
  * @param content 弹窗自定义内容区域
  */
@@ -94,41 +101,21 @@ fun ContentDialog(
     buttonTopSpace: Dp = dimensionResource(R.dimen.button_margin_top),
     outsideClickDismiss: Boolean = true,
     showBackMask: Boolean = true,
+    dialogAlignment: Alignment = Alignment.Center,
+    onShow: (() -> Unit)? = null,
     onDismiss: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val context = LocalContext.current
-    val activity = remember(context) { AppContext.getActivity(context) }
-    var dialogWindow: Window? by remember { mutableStateOf(null) }
+    val isShowed = remember { mutableStateOf(false) }
 
-    // 动画可见状态：仅控制入场动画
-    var animVisible by remember { mutableStateOf(false) }
-
-    LaunchedEffect(show.value) {
-        animVisible = show.value
-        if (show.value) {
-            //--隐藏状态栏和导航栏业务
-            if (!SystemBarUtil.isHideBar(activity)) {
-                return@LaunchedEffect
-            }
-            dialogWindow?.setFlags(
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-            )
-        } else {
+    if (!show.value) {
+        if (isShowed.value) {
             onDismiss?.invoke()
         }
+        return
     }
 
-    // 生命周期兜底：组件销毁重置状态，避免残留
-    DisposableEffect(Unit) {
-        onDispose {
-            animVisible = false
-        }
-    }
-
-    // 外部关闭直接不渲染Dialog，无退场动画
-    if (!show.value) return
+    isShowed.value = true
 
     Dialog(
         onDismissRequest = {
@@ -142,6 +129,37 @@ fun ContentDialog(
             usePlatformDefaultWidth = modifier.isNull(),
         )
     ) {
+        val context = LocalContext.current
+        val activity = remember(context) { AppContext.getActivity(context) }
+        var dialogWindow: Window? by remember { mutableStateOf(null) }
+
+        // 动画可见状态：仅控制入场动画
+        var animVisible by remember { mutableStateOf(false) }
+
+        LaunchedEffect(show.value) {
+            animVisible = show.value
+            if (show.value) {
+                //--隐藏状态栏和导航栏业务
+                if (!SystemBarUtil.isHideBar(activity)) {
+                    onShow?.invoke()
+                    return@LaunchedEffect
+                }
+                dialogWindow?.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                )
+                onShow?.invoke()
+            } else {
+                onDismiss?.invoke()
+            }
+        }
+
+        // 生命周期兜底：组件销毁重置状态，避免残留
+        DisposableEffect(Unit) {
+            onDispose {
+                animVisible = false
+            }
+        }
 
         //--隐藏状态栏和导航栏业务
         val rootView = LocalView.current
@@ -170,78 +188,99 @@ fun ContentDialog(
             }
         }
 
-        AnimatedVisibility(
-            visible = animVisible,
-            enter = fadeIn(tween(220, easing = FastOutSlowInEasing)) +
-                    scaleIn(
-                        initialScale = 0.95F,
-                        animationSpec = tween(220, easing = FastOutSlowInEasing)
-                    )
-        ) {
-            Card(
-                modifier = if (modifier.isNull()) Modifier else modifier,
-                shape = RoundedCornerShape(dialogCorner),
-                colors = CardDefaults.cardColors(containerColor = dialogBgColor)
-            ) {
-                Column(modifier = Modifier.padding(dialogSpace)) {
-                    // 标题区域
-                    if (title.isNotEmpty()) {
-
-                        FText(
-                            modifier = Modifier.align(titleAlignment),
-                            text = title,
-                            style = titleTextStyle,
-                            iconId = titleIconId,
-                            iconPadding = dimensionResource(R.dimen.drawable_padding),
-                            iconDirection = Direction.LEFT
-                        )
-
-                        Spacer(modifier = Modifier.height(contentSpace))
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                // 空白点击，吃掉所有触摸事件，阻止穿透下层
+                .clickable(
+                    indication = null, // 去掉水波纹
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = {
+                        if (outsideClickDismiss) {
+                            show.value = false
+                        }
                     }
+                ),
+            contentAlignment = dialogAlignment
+        ) {
 
-                    // 自定义内容区域
-                    content.invoke(this)
+            AnimatedVisibility(
+                visible = animVisible,
+                enter = fadeIn(tween(220, easing = FastOutSlowInEasing)) +
+                        scaleIn(
+                            initialScale = 0.95F,
+                            animationSpec = tween(220, easing = FastOutSlowInEasing)
+                        )
+            ) {
+                Card(
+                    modifier = if (modifier.isNull()) Modifier else modifier,
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 6.dp,
+                        pressedElevation = 12.dp
+                    ),
+                    shape = RoundedCornerShape(dialogCorner),
+                    colors = CardDefaults.cardColors(containerColor = dialogBgColor)
+                ) {
+                    Column(modifier = Modifier.padding(dialogSpace)) {
+                        // 标题区域
+                        if (title.isNotEmpty()) {
 
-                    Spacer(modifier = Modifier.height(buttonTopSpace))
-
-                    // 底部按钮区域
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = buttonArrangement
-                    ) {
-                        buttonList?.forEachIndexed { index, button ->
-                            if (index > 0) {
-                                Spacer(modifier = Modifier.width(dimensionResource(R.dimen.content_item_margin)))
-                            }
-
-                            val textColor = if (button.textColor.isNull()) {
-                                if (button.isOutline) {
-                                    button.bgColor
-                                } else {
-                                    Color(AppContext.getColor(R.color.button_text))
-                                }
-                            } else {
-                                button.textColor
-                            }
-
-                            FButton(
-                                text = button.text,
-                                textSize = button.textSize,
-                                textColor = textColor,
-                                isOutlinedButton = button.isOutline,
-                                width = button.width,
-                                height = button.height
-                                    ?: dimensionResource(R.dimen.middle_button_height),
-                                horizontalPadding = button.horizontalPadding,
-                                onClick = {
-                                    if (button.onClick == null) {
-                                        show.value = false
-                                    } else {
-                                        button.onClick.invoke()
-                                    }
-                                },
-                                shape = button.shape,
+                            FText(
+                                modifier = Modifier.align(titleAlignment),
+                                text = title,
+                                style = titleTextStyle,
+                                iconId = titleIconId,
+                                iconPadding = dimensionResource(R.dimen.drawable_padding),
+                                iconDirection = Direction.LEFT
                             )
+
+                            Spacer(modifier = Modifier.height(contentSpace))
+                        }
+
+                        // 自定义内容区域
+                        content.invoke(this)
+
+                        Spacer(modifier = Modifier.height(buttonTopSpace))
+
+                        // 底部按钮区域
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = buttonArrangement
+                        ) {
+                            buttonList?.forEachIndexed { index, button ->
+                                if (index > 0) {
+                                    Spacer(modifier = Modifier.width(dimensionResource(R.dimen.content_item_margin)))
+                                }
+
+                                val textColor = if (button.textColor.isNull()) {
+                                    if (button.isOutline) {
+                                        button.bgColor
+                                    } else {
+                                        Color(AppContext.getColor(R.color.button_text))
+                                    }
+                                } else {
+                                    button.textColor
+                                }
+
+                                FButton(
+                                    text = button.text,
+                                    textSize = button.textSize,
+                                    textColor = textColor,
+                                    isOutlinedButton = button.isOutline,
+                                    width = button.width,
+                                    height = button.height
+                                        ?: dimensionResource(R.dimen.middle_button_height),
+                                    horizontalPadding = button.horizontalPadding,
+                                    onClick = {
+                                        if (button.onClick == null) {
+                                            show.value = false
+                                        } else {
+                                            button.onClick.invoke()
+                                        }
+                                    },
+                                    shape = button.shape,
+                                )
+                            }
                         }
                     }
                 }
