@@ -30,6 +30,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.richard.ilbrary.compose.widget.DropdownMenu
 import com.richard.ilbrary.compose.widget.FButton
 import com.richard.ilbrary.compose.widget.FTextField
 import com.richard.ilbrary.compose.widget.TipDialog
@@ -114,18 +115,6 @@ fun HomePage(navController: NavHostController) {
     ) {
 
         val showDialog = remember { mutableStateOf(false) }
-
-        FTextField(
-            innerFocusStyle = FocusStyle.Main,
-            labelText = "物品类别",
-            hintText = "请输入物品类别",
-        )
-
-        FTextField(
-            innerFocusStyle = FocusStyle.Border,
-            labelText = "物品名称",
-            hintText = "请输入名称",
-        )
 
         FButton(text = "弹出确认框", height = 50.dp, isOutlinedButton = true) {
             showDialog.value = true

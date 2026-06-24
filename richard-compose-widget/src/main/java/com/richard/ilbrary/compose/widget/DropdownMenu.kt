@@ -48,45 +48,6 @@ import androidx.compose.ui.unit.sp
 import com.richard.library.compose.widget.R
 
 /**
- * @author: Richard
- * @createDate: 2026/6/11 16:43
- * @version: 1.0
- * @description: 下拉菜单框
- */
-@Preview(
-    showBackground = true,
-    widthDp = 640,
-    heightDp = 360
-)
-@Composable
-fun PreviewDropdownMenu() {
-    Box(contentAlignment = Alignment.Center) {
-        DropdownMenu(
-            labelText = "请选择",
-            options = listOf(
-                "选项1",
-                "选项2",
-                "选项3",
-                "选项4",
-                "选项5",
-                "选项6",
-                "选项7",
-                "选项8",
-                "选项9",
-                "选项10"
-            ),
-            selectedIndex = null,
-            onValueChange = {},
-            onOptionSelect = {},
-            isEditTextMode = false,
-            cornerRadius = 6.dp,
-            borderColor = Color(0xFFDDDDDD),
-            displayText = { it },
-        )
-    }
-}
-
-/**
  * 泛型标签下拉选择控件
  * @param modifier 控件修饰
  * @param buttonHeight 按钮高度(含按钮，输入框，下拉菜单项的高度)
@@ -137,7 +98,9 @@ fun <T> DropdownMenu(
 
 
     Row(
-        modifier = modifier.height(buttonHeight),
+        modifier = Modifier
+            .height(buttonHeight)
+            .then(modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -249,5 +212,38 @@ fun <T> DropdownMenu(
                 }
             }
         }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    widthDp = 640,
+    heightDp = 360
+)
+@Composable
+fun PreviewDropdownMenu() {
+    Box(contentAlignment = Alignment.Center) {
+        DropdownMenu(
+            labelText = "请选择",
+            options = listOf(
+                "选项1",
+                "选项2",
+                "选项3",
+                "选项4",
+                "选项5",
+                "选项6",
+                "选项7",
+                "选项8",
+                "选项9",
+                "选项10"
+            ),
+            selectedIndex = null,
+            onValueChange = {},
+            onOptionSelect = {},
+            isEditTextMode = false,
+            cornerRadius = 6.dp,
+            borderColor = Color(0xFFDDDDDD),
+            displayText = { it },
+        )
     }
 }
