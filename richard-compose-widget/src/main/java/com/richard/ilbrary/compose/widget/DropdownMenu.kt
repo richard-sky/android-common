@@ -108,7 +108,7 @@ fun <T> DropdownMenu(
             FText(text = labelText)
         }
 
-        Spacer(modifier = Modifier.width(dimensionResource(R.dimen.content_item_margin)))
+        Spacer(modifier = Modifier.width(dimensionResource(R.dimen.content_item_padding_left_right)))
 
         Row(
             modifier = Modifier
