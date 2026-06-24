@@ -299,7 +299,7 @@ fun PreviewFTextField() {
             singleLine = true,
             leadingIcon = {
                 Icon(
-                    painter = painterResource(R.mipmap.ic_dropdown_menu_down),
+                    painter = painterResource(R.mipmap.ic_dropdown_menu),
                     contentDescription = null
                 )
             },

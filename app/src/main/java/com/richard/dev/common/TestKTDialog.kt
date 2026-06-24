@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -113,6 +114,31 @@ fun HomePage(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
+        Box(contentAlignment = Alignment.Center) {
+            DropdownMenu(
+                labelText = "请选择",
+                options = listOf(
+                    "选项1",
+                    "选项2",
+                    "选项3",
+                    "选项4",
+                    "选项5",
+                    "选项6",
+                    "选项7",
+                    "选项8",
+                    "选项9",
+                    "选项10"
+                ),
+                selectedIndex = null,
+                onValueChange = {},
+                onOptionSelect = {},
+                isEditTextMode = false,
+                cornerRadius = 6.dp,
+                borderColor = Color(0xFFDDDDDD),
+                displayText = { it },
+            )
+        }
 
         val showDialog = remember { mutableStateOf(false) }
 

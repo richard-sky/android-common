@@ -12,7 +12,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.richard.ilbrary.compose.widget.data.DialogButton
 import com.richard.library.compose.widget.R
@@ -60,8 +59,8 @@ fun TipDialog(
     buttonArrangement: Arrangement.Horizontal = Arrangement.End,
     dialogCorner: Dp = dimensionResource(R.dimen.big_radius_value),
     dialogSpace: Dp = dimensionResource(R.dimen.content_padding),
-    contentSpace: Dp = 20.dp,
-    buttonTopSpace: Dp = 30.dp,
+    contentSpace: Dp = dimensionResource(R.dimen.content_padding),
+    buttonTopSpace: Dp = dimensionResource(R.dimen.button_margin_top),
     outsideClickDismiss: Boolean = true,
     onDismiss: (() -> Unit)? = null
 ) {

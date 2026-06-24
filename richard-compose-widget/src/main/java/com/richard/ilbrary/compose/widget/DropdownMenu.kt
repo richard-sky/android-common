@@ -31,7 +31,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -176,10 +178,12 @@ fun <T> DropdownMenu(
             }
 
             Image(
-                painter = painterResource(if (expanded) R.mipmap.ic_dropdown_menu_up else R.mipmap.ic_dropdown_menu_down),
+                painter = painterResource(id = R.mipmap.ic_dropdown_menu),
+                colorFilter = ColorFilter.tint(colorResource(R.color.text)),
                 contentDescription = null,
                 contentScale = ContentScale.Inside,
                 modifier = Modifier
+                    .rotate(if (expanded) 0F else 180F)
                     .width(buttonHeight)
                     .fillMaxHeight()
                     .clickable { expanded = !expanded }
