@@ -10,6 +10,7 @@ import com.richard.library.context.util.ThreadUtil;
 import com.richard.library.net.http.request.Requester;
 
 import java.lang.reflect.Type;
+import java.nio.ByteBuffer;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -236,10 +237,50 @@ public class WebSocketClient {
     /**
      * 发送消息
      *
+     * @param message 各种类型的消息
+     * @return 是否已发送
+     */
+    public boolean sendMessage(Object message) {
+        if (ObjectUtilKt.isNull(message)) {
+            LogUtil.dTag(TAG, "发送消息不能null");
+            return false;
+        }
+
+        if (message instanceof ByteString data) {
+            return this.sendMessage(data);
+        }
+
+        if (message instanceof Byte data) {
+            return this.sendMessage(ByteString.of(data));
+        }
+
+        if (message instanceof ByteBuffer data) {
+            return this.sendMessage(ByteString.of(data));
+        }
+
+        if (message.getClass().isAssignableFrom(byte[].class)) {
+            return this.sendMessage(ByteString.of((byte[]) message));
+        }
+
+        if (JsonKt.isEntity(message.getClass())) {
+            return this.sendMessage(JsonKt.toJson(message));
+        } else {
+            return this.sendMessage(message.toString());
+        }
+    }
+
+    /**
+     * 发送消息
+     *
      * @param message 消息内容
      * @return 是否发送成功
      */
     public boolean sendMessage(String message) {
+        if (ObjectUtilKt.isNull(message)) {
+            LogUtil.dTag(TAG, "发送消息不能null");
+            return false;
+        }
+
         if (webSocket != null && isConnected()) {
             boolean result = webSocket.send(message);
             if (result) {
@@ -256,14 +297,19 @@ public class WebSocketClient {
     /**
      * 发送二进制消息
      *
-     * @param bytes 二进制数据
+     * @param message 二进制数据
      * @return 是否发送成功
      */
-    public boolean sendMessage(ByteString bytes) {
+    public boolean sendMessage(ByteString message) {
+        if (ObjectUtilKt.isNull(message)) {
+            LogUtil.dTag(TAG, "发送消息不能null");
+            return false;
+        }
+
         if (webSocket != null && isConnected()) {
-            boolean result = webSocket.send(bytes);
+            boolean result = webSocket.send(message);
             if (result) {
-                LogUtil.dTag(TAG, "发送二进制消息，大小: " + bytes.size());
+                LogUtil.dTag(TAG, "发送二进制消息，大小: " + message.size());
             } else {
                 LogUtil.eTag(TAG, "发送二进制消息失败");
             }
@@ -345,6 +391,7 @@ public class WebSocketClient {
      */
     public <T> void onMain(Object params, @NonNull OnReceive<T> listener) {
         listener.setCallMain(true);
+        this.on(params, listener);
     }
 
     /**
@@ -370,16 +417,7 @@ public class WebSocketClient {
         }
         listener.setCallMain(false);
         onReceives.add(listener);
-
-        if (ObjectUtilKt.isEmpty(params)) {
-            return;
-        }
-
-        if (JsonKt.isEntity(params.getClass())) {
-            this.sendMessage(JsonKt.toJson(params));
-        } else {
-            this.sendMessage(params.toString());
-        }
+        this.sendMessage(params);
     }
 
     /**
@@ -402,16 +440,7 @@ public class WebSocketClient {
             return;
         }
         onReceiveBytes.add(listener);
-
-        if (ObjectUtilKt.isEmpty(params)) {
-            return;
-        }
-
-        if (JsonKt.isEntity(params.getClass())) {
-            this.sendMessage(JsonKt.toJson(params));
-        } else {
-            this.sendMessage(params.toString());
-        }
+        this.sendMessage(params);
     }
 
     /**

@@ -5,9 +5,6 @@ import com.richard.dev.common.R;
 import com.richard.dev.common.TestKTDialog;
 import com.richard.dev.common.databinding.ActivityTestBinding;
 import com.richard.library.basic.basic.BasicBindingActivity;
-import com.richard.library.context.util.LanguageUtil;
-
-import java.util.Locale;
 
 /**
  * <pre>
@@ -36,11 +33,6 @@ public class TestActivity extends BasicBindingActivity<ActivityTestBinding> {
     @Override
     public void bindListener() {
         binding.bvBtn.setOnClickListener(v -> {
-            if (LanguageUtil.getAppContextLanguage().getLanguage().equals(Locale.SIMPLIFIED_CHINESE.getLanguage())) {
-                LanguageUtil.applyLanguage(Locale.ENGLISH);
-            } else {
-                LanguageUtil.applyLanguage(Locale.SIMPLIFIED_CHINESE);
-            }
 
         });
 
