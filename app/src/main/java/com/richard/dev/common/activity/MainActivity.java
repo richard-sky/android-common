@@ -13,14 +13,23 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.richard.dev.common.R;
 import com.richard.dev.common.UserJavaScriptMethod;
 import com.richard.dev.common.databinding.ActivityMainBinding;
+import com.richard.dev.common.databinding.ItemMainFuncBinding;
 import com.richard.library.basic.basic.BasicBindingActivity;
+import com.richard.library.basic.basic.adapter.BasicBindingAdapter;
+import com.richard.library.basic.basic.adapter.BasicViewHolder;
 import com.richard.library.basic.dto.ItemDTO;
 import com.richard.library.basic.web.WebDialog;
+import com.richard.library.context.AppContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressLint("NonConstantResourceId")
 public class MainActivity extends BasicBindingActivity<ActivityMainBinding> {
 
     private ActivityResultLauncher<Intent> activityResultLauncher;
+    private ListAdapter adapter;
+
 
     @Override
     public void initLayoutView() {
@@ -33,140 +42,147 @@ public class MainActivity extends BasicBindingActivity<ActivityMainBinding> {
         navigationbar.setTitle("公共库测试");
         navigationbar.setTitleTextViewShow(true);
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), activityResultCallback);
+
+        if(AppContext.isScreenPortrait()){
+            binding.srvView.setColumn(2);
+            binding.srvView.notifyAttrChanged();
+        }else {
+            binding.srvView.setColumn(6);
+            binding.srvView.notifyAttrChanged();
+        }
+
+        adapter = new ListAdapter();
+        binding.srvView.setAdapter(adapter);
+        adapter.completeLoad(this.getData());
     }
 
     @Override
     public void bindListener() {
-        //ARouter路由库测试
-        binding.btnTestArouter.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/second")
-                    .withString("name", "Arouter 路由框架")
-                    .withSerializable("obj", new ItemDTO<String>("Arou", "22"))
-                    .navigation();
-        });
-
-        //动态权限获取测试
-        binding.btnPermission.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/permission")
-                    .navigation();
-        });
-
-        //Test MVP
-        binding.btnTestMvp.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/mvp")
-                    .navigation();
-        });
-
-        //Test request
-        binding.btnTestRequest.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/request")
-                    .navigation();
-        });
-
-        //Test mvvm
-        binding.btnTestMvvm.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/mvvm")
-                    .navigation();
-        });
-
-        //Test activity result
-        binding.btnTestResult.setOnClickListener((v) -> {
-            activityResultLauncher.launch(new Intent(getContext(), TestResultActivity.class));
-        });
-
-        //Test pinned
-        binding.btnTestPinned.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/pinned")
-                    .navigation();
-        });
-
-        //Test javascript
-        binding.btnTestJs.setOnClickListener((v) -> {
+        adapter.setOnItemClickListener((itemInfo, position) -> {
+            switch (itemInfo.getData()) {
+                case "test":
+                    ARouter.getInstance()
+                            .build("/test/test")
+                            .navigation();
+                    break;
+                case "ftp":
+                    TestFTPActivity.start(getContext());
+                    break;
+                case "cron":
+                    Cron4jActivity.start(getContext());
+                    break;
+                case "tree_list":
+                    TestTreeActivity.start(getContext());
+                    break;
+                case "arouter":
+                    ARouter.getInstance()
+                            .build("/test/second")
+                            .withString("name", "Arouter 路由框架")
+                            .withSerializable("obj", new ItemDTO<String>("Arou", "22"))
+                            .navigation();
+                    break;
+                case "permission":
+                    ARouter.getInstance()
+                            .build("/test/permission")
+                            .navigation();
+                    break;
+                case "mvp":
+                    ARouter.getInstance()
+                            .build("/test/mvp")
+                            .navigation();
+                    break;
+                case "request":
+                    ARouter.getInstance()
+                            .build("/test/request")
+                            .navigation();
+                    break;
+                case "mvvm":
+                    ARouter.getInstance()
+                            .build("/test/mvvm")
+                            .navigation();
+                    break;
+                case "activity_result":
+                    activityResultLauncher.launch(new Intent(getContext(), TestResultActivity.class));
+                    break;
+                case "pinned_list":
+                    ARouter.getInstance()
+                            .build("/test/pinned")
+                            .navigation();
+                    break;
+                case "invoke_js":
 //            WebActivity.start(getContext(), null, "file:///android_asset/index.html", new UserJavaScript());
-            WebDialog.start(
-                    getSupportFragmentManager()
-                    , "js调用java"
-                    , "file:///android_asset/index.html"
-                    , new UserJavaScriptMethod()
-            );
+                    WebDialog.start(
+                            getSupportFragmentManager()
+                            , "js调用java"
+                            , "file:///android_asset/index.html"
+                            , new UserJavaScriptMethod()
+                    );
+                    break;
+                case "adapter_binding":
+                    ARouter.getInstance()
+                            .build("/test/adapterBinding")
+                            .navigation();
+                    break;
+                case "activity_binding":
+                    ARouter.getInstance()
+                            .build("/test/bindingActivity")
+                            .navigation();
+                    break;
+                case "slide_recyclerview":
+                    ARouter.getInstance()
+                            .build("/test/slide")
+                            .navigation();
+                    break;
+                case "ffmpeg":
+                    ARouter.getInstance()
+                            .build("/test/ffmpeg")
+                            .navigation();
+                    break;
+                case "system_media_code":
+                    ARouter.getInstance()
+                            .build("/test/hard/coding")
+                            .navigation();
+                    break;
+                case "printer":
+                    ARouter.getInstance()
+                            .build("/test/printer")
+                            .navigation();
+                    break;
+                case "media_selector":
+                    ARouter.getInstance()
+                            .build("/test/picture/selector")
+                            .navigation();
+                    break;
+            }
         });
+    }
 
-        //Test adapter binding
-        binding.btnTestAdapterBinding.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/adapterBinding")
-                    .navigation();
-        });
+    /**
+     * 功能列表数据
+     */
+    private List<ItemDTO<String>> getData() {
+        List<ItemDTO<String>> data = new ArrayList<>();
+        data.add(new ItemDTO<>("测试", "test", true));
+        data.add(new ItemDTO<>("测试FTP", "ftp", true));
+        data.add(new ItemDTO<>("Cron定时任务", "cron", true));
+        data.add(new ItemDTO<>("树形列表", "tree_list", true));
+        data.add(new ItemDTO<>("Arouter路由", "arouter", true));
+        data.add(new ItemDTO<>("Permission", "permission", true));
+        data.add(new ItemDTO<>("MVP架构示例", "mvp", true));
+        data.add(new ItemDTO<>("网络请求", "request", true));
+        data.add(new ItemDTO<>("MVVM架构示例", "mvvm", true));
+        data.add(new ItemDTO<>("Activity Result", "activity_result", true));
+        data.add(new ItemDTO<>("Pinned List", "pinned_list", true));
+        data.add(new ItemDTO<>("JavaScript调用", "invoke_js", true));
+        data.add(new ItemDTO<>("Adapter Binding", "adapter_binding", true));
+        data.add(new ItemDTO<>("Activity Binding", "activity_binding", true));
+        data.add(new ItemDTO<>("侧滑RecyclerView", "slide_recyclerview", true));
+        data.add(new ItemDTO<>("FFMpeg", "ffmpeg", true));
+        data.add(new ItemDTO<>("系统MediaCodec硬编解码", "system_media_code", true));
+        data.add(new ItemDTO<>("小票/标签打印", "printer", true));
+        data.add(new ItemDTO<>("本地相册/视频/音频选择", "media_selector", true));
 
-        //Test activity binding
-        binding.btnTestActivityBinding.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/bindingActivity")
-                    .navigation();
-        });
-
-        //Test activity binding
-        binding.btnSlide.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/slide")
-                    .navigation();
-        });
-
-        //FFMpeg
-        binding.btnFfmpeg.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/ffmpeg")
-                    .navigation();
-        });
-
-        //系统MediaCodec硬编解码
-        binding.btnHardCoding.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/hard/coding")
-                    .navigation();
-        });
-
-        //小票/标签打印
-        binding.btnPrinter.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/printer")
-                    .navigation();
-        });
-
-        //本地相册选择
-        binding.btnPictureSelector.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/picture/selector")
-                    .navigation();
-        });
-
-        //树形列表
-        binding.btnTestTree.setOnClickListener(v -> {
-            TestTreeActivity.start(getContext());
-        });
-
-        //cron定时任务
-        binding.btnTestCron.setOnClickListener(v -> {
-            Cron4jActivity.start(getContext());
-        });
-
-        //Test FTP
-        binding.btnTestFtp.setOnClickListener((v) -> {
-            TestFTPActivity.start(getContext());
-        });
-
-        //Test
-        binding.btnTest.setOnClickListener((v) -> {
-            ARouter.getInstance()
-                    .build("/test/test")
-                    .navigation();
-        });
+        return data;
     }
 
     @Override
@@ -184,4 +200,21 @@ public class MainActivity extends BasicBindingActivity<ActivityMainBinding> {
             getUIView().showMsg(result.getData().getStringExtra("result"));
         }
     };
+
+    /**
+     * 功能列表数据适配
+     */
+    private static class ListAdapter extends BasicBindingAdapter<ItemDTO<String>> {
+
+        @Override
+        protected int getItemLayoutId(int viewType) {
+            return R.layout.item_main_func;
+        }
+
+        @Override
+        protected void convert(BasicViewHolder holder, ItemDTO<String> itemInfo, int position) {
+            ItemMainFuncBinding binding = holder.getBinding();
+            binding.btn.setText(itemInfo.getName());
+        }
+    }
 }

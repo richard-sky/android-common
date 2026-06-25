@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <com.richard.library.basic.widget.ButtonView
+        android:id="@+id/btn"
+        style="@style/button_style"
+        android:layout_height="80dp"
+        android:text="测试"
+        app:bv_radius="@dimen/big_radius_value" />
+
+</layout>

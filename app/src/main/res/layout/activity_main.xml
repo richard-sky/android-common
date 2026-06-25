@@ -1,134 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
     </data>
 
-    <androidx.core.widget.NestedScrollView
+    <com.richard.library.basic.widget.list.SRecyclerView
+        android:id="@+id/srv_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:srv_column="3"
+        app:srv_divider_size="@dimen/list_item_margin"
+        app:srv_type="grid" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="test" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_ftp"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="测试FTP" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_cron"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="cron定时任务" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_tree"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="树形列表" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_arouter"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="测试ARouter" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_permission"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="测试动态权限获取" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_mvp"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="test mvp" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_request"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="test request" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_mvvm"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="test mvvm" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_result"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="test activity result" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_pinned"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="test pinned list" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_js"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="test javaScript" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_adapter_binding"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="test adapter binding" />
-
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_test_activity_binding"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="test activity binding" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_slide"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="侧滑菜单RecyclerView" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_ffmpeg"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="FFMpeg" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_hard_coding"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="系统MediaCodec硬编解码" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_printer"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="小票/标签打印" />
-
-            <com.richard.library.basic.widget.ButtonView
-                android:id="@+id/btn_picture_selector"
-                style="@style/button_style"
-                android:layout_margin="@dimen/content_padding"
-                android:text="本地相册选择" />
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
 </layout>
