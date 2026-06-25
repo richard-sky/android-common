@@ -608,7 +608,7 @@ public class WebSocketClient {
         private int maxReconnectCount = -1;                // 最大重连次数(小于0代表不限制)
 
         // 心跳相关
-        private boolean enableHeartbeat = true;             // 是否开启心跳
+        private boolean enableHeartbeat = false;             // 是否开启心跳
         private int heartbeatInterval = 30000;              // 心跳间隔(ms)
         private String heartbeatMessage = "ping";           // 心跳消息
 
