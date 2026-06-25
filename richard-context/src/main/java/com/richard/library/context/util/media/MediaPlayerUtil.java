@@ -166,7 +166,7 @@ public final class MediaPlayerUtil {
     /**
      * 添加播放
      */
-    private synchronized void play(AudioItem audio) {
+    public synchronized void play(AudioItem audio) {
         this.isPlayFinish = false;
         try {
             if (mediaPlayer == null) {

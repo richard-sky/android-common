@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.richard.dev.common.R;
 import com.richard.dev.common.UserJavaScriptMethod;
+import com.richard.dev.common.activity.speech.TestWebsocketActivity;
 import com.richard.dev.common.databinding.ActivityMainBinding;
 import com.richard.dev.common.databinding.ItemMainFuncBinding;
 import com.richard.library.basic.basic.BasicBindingActivity;
