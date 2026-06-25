@@ -36,7 +36,7 @@ import com.richard.library.context.util.isNull
  * @param title 标题组件(titleText 和 title 二选一，优先title)
  * @param navLeft 导航条左边组件
  * @param navRight 导航条右边组件
- * @param backEvent 返回页面时事件
+ * @param backEvent 返回页面时事件(仅使用内部左边返回按钮时有效)
  * @param navController NavController
  * @param content 主内容
  */
