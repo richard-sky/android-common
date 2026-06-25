@@ -43,7 +43,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -188,35 +187,36 @@ fun ContentDialog(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                // 空白点击，吃掉所有触摸事件，阻止穿透下层
-                .clickable(
-                    indication = null, // 去掉水波纹
-                    interactionSource = remember { MutableInteractionSource() },
-                    onClick = {
-                        if (outsideClickDismiss) {
-                            show.value = false
+        Box(contentAlignment = dialogAlignment) {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    // 空白点击，吃掉所有触摸事件，阻止穿透下层
+                    .clickable(
+                        indication = null, // 去掉水波纹
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = {
+                            if (outsideClickDismiss) {
+                                show.value = false
+                            }
                         }
-                    }
-                ),
-            contentAlignment = dialogAlignment
-        ) {
+                    ), content = {}
+            )
 
             AnimatedVisibility(
                 visible = animVisible,
-                enter = fadeIn(tween(220, easing = FastOutSlowInEasing)) +
+                enter = fadeIn(tween(100, easing = FastOutSlowInEasing)) +
                         scaleIn(
                             initialScale = 0.95F,
-                            animationSpec = tween(220, easing = FastOutSlowInEasing)
+                            animationSpec = tween(150, easing = FastOutSlowInEasing)
                         )
             ) {
                 Card(
                     modifier = if (modifier.isNull()) Modifier else modifier,
                     elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp,
-                        pressedElevation = 12.dp
+                        defaultElevation = dialogCorner,
+                        pressedElevation = dialogCorner
                     ),
                     shape = RoundedCornerShape(dialogCorner),
                     colors = CardDefaults.cardColors(containerColor = dialogBgColor)

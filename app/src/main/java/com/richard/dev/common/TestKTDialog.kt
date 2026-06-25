@@ -2,19 +2,14 @@ package com.richard.dev.common
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,17 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.richard.ilbrary.compose.widget.DropdownMenu
 import com.richard.ilbrary.compose.widget.FButton
 import com.richard.ilbrary.compose.widget.FTextField
-import com.richard.ilbrary.compose.widget.LoadingDialog
 import com.richard.ilbrary.compose.widget.TipDialog
 import com.richard.ilbrary.compose.widget.data.DialogButton
 import com.richard.ilbrary.compose.widget.data.FocusStyle
@@ -112,7 +104,9 @@ fun AppNavHost() {
 @Composable
 fun HomePage(navController: NavHostController) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -122,6 +116,14 @@ fun HomePage(navController: NavHostController) {
         FButton(text = "弹出确认框", height = 50.dp, isOutlinedButton = true) {
             showDialog.value = true
         }
+
+        FTextField(
+            isEditTextMode = false,
+            labelText = "用户名",
+            hintText = "请选择用户名",
+            innerFocusStyle = FocusStyle.Border,
+            trailingIcon = { Icon(painter = painterResource(R.mipmap.icon_close), contentDescription = null) }
+        )
 
 //        LoadingDialog(showDialog)
 
