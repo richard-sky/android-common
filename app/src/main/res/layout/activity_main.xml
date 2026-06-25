@@ -10,6 +10,9 @@
         android:id="@+id/srv_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingStart="@dimen/content_padding"
+        android:paddingTop="@dimen/content_padding"
+        android:paddingEnd="@dimen/content_padding"
         app:srv_column="3"
         app:srv_divider_size="@dimen/list_item_margin"
         app:srv_type="grid" />
