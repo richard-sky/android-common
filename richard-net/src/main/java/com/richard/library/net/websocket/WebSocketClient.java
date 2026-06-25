@@ -36,6 +36,7 @@ public class WebSocketClient {
 
     private WebSocket webSocket;
     private int currentReconnectCount = 0;             // 当前重连次数
+    private boolean isAllowAutoReconnect;              // 是否允许自动重连
     private final Builder config;
     private ConnectionState currentState = ConnectionState.DISCONNECTED;
     private final Set<OnReceive<?>> onReceives = new LinkedHashSet<>();
@@ -59,7 +60,7 @@ public class WebSocketClient {
     private final ThreadUtil.RunTask reconnectTask = new ThreadUtil.RunTask() {
         @Override
         public void runEvent() {
-            if (config.autoReconnect && (config.maxReconnectCount < 0 || currentReconnectCount < config.maxReconnectCount)) {
+            if (isAllowAutoReconnect && (config.maxReconnectCount < 0 || currentReconnectCount < config.maxReconnectCount)) {
                 currentReconnectCount++;
                 LogUtil.iTag(TAG, "尝试第 " + currentReconnectCount + " 次重连");
 
@@ -109,6 +110,7 @@ public class WebSocketClient {
             return;
         }
 
+        isAllowAutoReconnect = config.autoReconnect;
         setState(ConnectionState.CONNECTING);
 
         //同步锁相关
@@ -188,7 +190,7 @@ public class WebSocketClient {
                 }
 
                 // 尝试重连
-                if (config.autoReconnect) {
+                if (isAllowAutoReconnect) {
                     scheduleReconnect();
                 }
             }
@@ -209,7 +211,7 @@ public class WebSocketClient {
                     }
 
                     // 尝试重连
-                    if (config.autoReconnect) {
+                    if (isAllowAutoReconnect) {
                         scheduleReconnect();
                     }
                 } finally {
@@ -474,7 +476,7 @@ public class WebSocketClient {
      * @param reason 关闭原因
      */
     public void disconnect(int code, String reason) {
-        config.autoReconnect = false;  // 手动断开时不自动重连
+        isAllowAutoReconnect = false;
         reconnectTask.cancel(true);
         stopHeartbeat();
 
@@ -486,6 +488,7 @@ public class WebSocketClient {
         this.onReceives.clear();
         this.onReceiveBytes.clear();
 
+        currentReconnectCount = 0;
         setState(ConnectionState.DISCONNECTED);
         LogUtil.iTag(TAG, "WebSocket已断开");
     }
