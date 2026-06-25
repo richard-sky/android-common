@@ -43,10 +43,10 @@ public class MainActivity extends BasicBindingActivity<ActivityMainBinding> {
         navigationbar.setTitleTextViewShow(true);
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), activityResultCallback);
 
-        if(AppContext.isScreenPortrait()){
+        if (AppContext.isScreenPortrait()) {
             binding.srvView.setColumn(2);
             binding.srvView.notifyAttrChanged();
-        }else {
+        } else {
             binding.srvView.setColumn(6);
             binding.srvView.notifyAttrChanged();
         }
@@ -59,102 +59,114 @@ public class MainActivity extends BasicBindingActivity<ActivityMainBinding> {
     @Override
     public void bindListener() {
         adapter.setOnItemClickListener((itemInfo, position) -> {
-            switch (itemInfo.getData()) {
-                case "test":
-                    ARouter.getInstance()
-                            .build("/test/test")
-                            .navigation();
-                    break;
-                case "ftp":
-                    TestFTPActivity.start(getContext());
-                    break;
-                case "cron":
-                    Cron4jActivity.start(getContext());
-                    break;
-                case "tree_list":
-                    TestTreeActivity.start(getContext());
-                    break;
-                case "arouter":
-                    ARouter.getInstance()
-                            .build("/test/second")
-                            .withString("name", "Arouter 路由框架")
-                            .withSerializable("obj", new ItemDTO<String>("Arou", "22"))
-                            .navigation();
-                    break;
-                case "permission":
-                    ARouter.getInstance()
-                            .build("/test/permission")
-                            .navigation();
-                    break;
-                case "mvp":
-                    ARouter.getInstance()
-                            .build("/test/mvp")
-                            .navigation();
-                    break;
-                case "request":
-                    ARouter.getInstance()
-                            .build("/test/request")
-                            .navigation();
-                    break;
-                case "mvvm":
-                    ARouter.getInstance()
-                            .build("/test/mvvm")
-                            .navigation();
-                    break;
-                case "activity_result":
-                    activityResultLauncher.launch(new Intent(getContext(), TestResultActivity.class));
-                    break;
-                case "pinned_list":
-                    ARouter.getInstance()
-                            .build("/test/pinned")
-                            .navigation();
-                    break;
-                case "invoke_js":
-//            WebActivity.start(getContext(), null, "file:///android_asset/index.html", new UserJavaScript());
-                    WebDialog.start(
-                            getSupportFragmentManager()
-                            , "js调用java"
-                            , "file:///android_asset/index.html"
-                            , new UserJavaScriptMethod()
-                    );
-                    break;
-                case "adapter_binding":
-                    ARouter.getInstance()
-                            .build("/test/adapterBinding")
-                            .navigation();
-                    break;
-                case "activity_binding":
-                    ARouter.getInstance()
-                            .build("/test/bindingActivity")
-                            .navigation();
-                    break;
-                case "slide_recyclerview":
-                    ARouter.getInstance()
-                            .build("/test/slide")
-                            .navigation();
-                    break;
-                case "ffmpeg":
-                    ARouter.getInstance()
-                            .build("/test/ffmpeg")
-                            .navigation();
-                    break;
-                case "system_media_code":
-                    ARouter.getInstance()
-                            .build("/test/hard/coding")
-                            .navigation();
-                    break;
-                case "printer":
-                    ARouter.getInstance()
-                            .build("/test/printer")
-                            .navigation();
-                    break;
-                case "media_selector":
-                    ARouter.getInstance()
-                            .build("/test/picture/selector")
-                            .navigation();
-                    break;
-            }
+            this.onClickFunc(itemInfo);
         });
+
+        this.onClickFunc(new ItemDTO<>("Websocket", "websocket",true));
+    }
+
+    /**
+     * 处理点几事件
+     */
+    private void onClickFunc(ItemDTO<String> funcItem) {
+        switch (funcItem.getData()) {
+            case "test":
+                ARouter.getInstance()
+                        .build("/test/test")
+                        .navigation();
+                break;
+            case "ftp":
+                TestFTPActivity.start(getContext());
+                break;
+            case "cron":
+                Cron4jActivity.start(getContext());
+                break;
+            case "tree_list":
+                TestTreeActivity.start(getContext());
+                break;
+            case "arouter":
+                ARouter.getInstance()
+                        .build("/test/second")
+                        .withString("name", "Arouter 路由框架")
+                        .withSerializable("obj", new ItemDTO<String>("Arou", "22"))
+                        .navigation();
+                break;
+            case "permission":
+                ARouter.getInstance()
+                        .build("/test/permission")
+                        .navigation();
+                break;
+            case "mvp":
+                ARouter.getInstance()
+                        .build("/test/mvp")
+                        .navigation();
+                break;
+            case "request":
+                ARouter.getInstance()
+                        .build("/test/request")
+                        .navigation();
+                break;
+            case "mvvm":
+                ARouter.getInstance()
+                        .build("/test/mvvm")
+                        .navigation();
+                break;
+            case "activity_result":
+                activityResultLauncher.launch(new Intent(getContext(), TestResultActivity.class));
+                break;
+            case "pinned_list":
+                ARouter.getInstance()
+                        .build("/test/pinned")
+                        .navigation();
+                break;
+            case "invoke_js":
+//            WebActivity.start(getContext(), null, "file:///android_asset/index.html", new UserJavaScript());
+                WebDialog.start(
+                        getSupportFragmentManager()
+                        , "js调用java"
+                        , "file:///android_asset/index.html"
+                        , new UserJavaScriptMethod()
+                );
+                break;
+            case "adapter_binding":
+                ARouter.getInstance()
+                        .build("/test/adapterBinding")
+                        .navigation();
+                break;
+            case "activity_binding":
+                ARouter.getInstance()
+                        .build("/test/bindingActivity")
+                        .navigation();
+                break;
+            case "slide_recyclerview":
+                ARouter.getInstance()
+                        .build("/test/slide")
+                        .navigation();
+                break;
+            case "ffmpeg":
+                ARouter.getInstance()
+                        .build("/test/ffmpeg")
+                        .navigation();
+                break;
+            case "system_media_code":
+                ARouter.getInstance()
+                        .build("/test/hard/coding")
+                        .navigation();
+                break;
+            case "printer":
+                ARouter.getInstance()
+                        .build("/test/printer")
+                        .navigation();
+                break;
+            case "media_selector":
+                ARouter.getInstance()
+                        .build("/test/picture/selector")
+                        .navigation();
+                break;
+            case "websocket":
+                TestWebsocketActivity.Companion.start(getContext());
+                break;
+        }
     }
 
     /**
@@ -162,6 +174,7 @@ public class MainActivity extends BasicBindingActivity<ActivityMainBinding> {
      */
     private List<ItemDTO<String>> getData() {
         List<ItemDTO<String>> data = new ArrayList<>();
+        data.add(new ItemDTO<>("Websocket", "websocket", true));
         data.add(new ItemDTO<>("测试", "test", true));
         data.add(new ItemDTO<>("测试FTP", "ftp", true));
         data.add(new ItemDTO<>("Cron定时任务", "cron", true));

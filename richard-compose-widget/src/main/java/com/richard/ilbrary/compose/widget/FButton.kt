@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.richard.ilbrary.compose.widget.type.Direction
 import com.richard.library.context.R
 
 /**
@@ -69,6 +70,10 @@ fun FButton(
     disabledBgColor: Color = colorResource(R.color.button_disabled_bg),
     textSize: TextUnit = dimensionResource(R.dimen.button_text_size).value.sp,
     textColor: Color = colorResource(R.color.button_text),
+    iconId: Int? = null,
+    iconSize: Dp? = null,
+    iconPadding: Dp = dimensionResource(com.richard.library.compose.widget.R.dimen.drawable_padding),
+    iconDirection: Direction = Direction.LEFT,
     isOutlinedButton: Boolean = false,
     onClick: () -> Unit
 ) {
@@ -85,6 +90,10 @@ fun FButton(
         disabledGradient = listOf(disabledBgColor, disabledBgColor),
         textSize = textSize,
         textColor = textColor,
+        iconId = iconId,
+        iconSize = iconSize,
+        iconPadding = iconPadding,
+        iconDirection = iconDirection,
         isOutlinedButton = isOutlinedButton,
         onClick = onClick
     )

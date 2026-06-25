@@ -13,6 +13,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.richard.library.context.AppContext;
+import com.richard.library.context.R;
 
 /**
  * @author: Richard
@@ -24,7 +25,7 @@ import com.richard.library.context.AppContext;
 public final class SystemBarUtil {
 
     private static BarHide barHide = BarHide.FLAG_SHOW_BAR;
-    private static Integer statusBarColor;
+    private static Integer statusBarColor = AppContext.getColor(R.color.navigation_bar_backcolor);
     private static Integer navigationBarColor;
 
     /**

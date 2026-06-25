@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.richard.ilbrary.compose.widget.type.Direction
 import com.richard.library.compose.widget.R
+import com.richard.library.context.util.isNull
 
 /**
  * @author: Richard
@@ -73,6 +75,7 @@ fun PreviewFTextUI() {
  * @param style 文本样式
  * @param iconId 图标资源id
  * @param iconSize 图标大小
+ * @param iconTint 图标tint
  * @param iconPadding 图标间距
  * @param iconDirection 图标位置
  */
@@ -99,10 +102,11 @@ fun FText(
     style: TextStyle = LocalTextStyle.current,
 
     /*FText控件扩展属性*/
-    iconId: Int? = null,//图标资源id
-    iconSize: Dp? = null,//图标大小
-    iconPadding: Dp = dimensionResource(R.dimen.drawable_padding),//图标间距
-    iconDirection: Direction = Direction.LEFT,//图标位置
+    iconId: Int? = null,
+    iconSize: Dp? = null,
+    iconTint: Color? = null,
+    iconPadding: Dp = dimensionResource(R.dimen.drawable_padding),
+    iconDirection: Direction = Direction.LEFT,
 ) {
 
     if (iconId == null) {
@@ -132,18 +136,13 @@ fun FText(
     when (iconDirection) {
         Direction.LEFT -> {
             Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-                if (iconSize != null) {
-                    Image(
-                        painter = painterResource(iconId),
-                        contentDescription = null,
-                        modifier = Modifier.size(iconSize),
-                    )
-                } else {
-                    Image(
-                        painter = painterResource(iconId),
-                        contentDescription = null,
-                    )
-                }
+
+                Image(
+                    painter = painterResource(iconId),
+                    contentDescription = null,
+                    modifier = if (iconSize.isNull()) Modifier else Modifier.size(iconSize),
+                    colorFilter = if (iconTint.isNull()) null else ColorFilter.tint(iconTint)
+                )
 
                 Spacer(modifier = Modifier.width(iconPadding))
 
@@ -185,35 +184,23 @@ fun FText(
 
                 Spacer(modifier = Modifier.width(iconPadding))
 
-                if (iconSize != null) {
-                    Image(
-                        painter = painterResource(iconId),
-                        contentDescription = null,
-                        modifier = Modifier.size(iconSize),
-                    )
-                } else {
-                    Image(
-                        painter = painterResource(iconId),
-                        contentDescription = null,
-                    )
-                }
+                Image(
+                    painter = painterResource(iconId),
+                    contentDescription = null,
+                    modifier = if (iconSize.isNull()) Modifier else Modifier.size(iconSize),
+                    colorFilter = if (iconTint.isNull()) null else ColorFilter.tint(iconTint)
+                )
             }
         }
 
         Direction.TOP -> {
             Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-                if (iconSize != null) {
-                    Image(
-                        painter = painterResource(iconId),
-                        contentDescription = null,
-                        modifier = Modifier.size(iconSize),
-                    )
-                } else {
-                    Image(
-                        painter = painterResource(iconId),
-                        contentDescription = null,
-                    )
-                }
+                Image(
+                    painter = painterResource(iconId),
+                    contentDescription = null,
+                    modifier = if (iconSize.isNull()) Modifier else Modifier.size(iconSize),
+                    colorFilter = if (iconTint.isNull()) null else ColorFilter.tint(iconTint)
+                )
 
                 Spacer(modifier = Modifier.height(iconPadding))
 
@@ -255,18 +242,12 @@ fun FText(
 
                 Spacer(modifier = Modifier.height(iconPadding))
 
-                if (iconSize != null) {
-                    Image(
-                        painter = painterResource(iconId),
-                        contentDescription = null,
-                        modifier = Modifier.size(iconSize),
-                    )
-                } else {
-                    Image(
-                        painter = painterResource(iconId),
-                        contentDescription = null,
-                    )
-                }
+                Image(
+                    painter = painterResource(iconId),
+                    contentDescription = null,
+                    modifier = if (iconSize.isNull()) Modifier else Modifier.size(iconSize),
+                    colorFilter = if (iconTint.isNull()) null else ColorFilter.tint(iconTint)
+                )
             }
         }
     }

@@ -56,6 +56,7 @@
         <activity android:name=".activity.TestPictureSelectorActivity" />
         <activity android:name=".activity.Cron4jActivity" />
         <activity android:name="com.richard.library.basic.web.WebActivity" />
+        <activity android:name=".activity.TestWebsocketActivity" />
 
         <!--crash 日志浏览-->
         <activity
