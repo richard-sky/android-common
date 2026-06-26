@@ -74,7 +74,7 @@ class TestWebsocketActivity : BasicActivity() {
                 .padding(dimensionResource(R.dimen.content_padding)),
         ) {
 
-            FButton(text = "连接", modifier = Modifier.fillMaxWidth()) {
+            FButton(text = "连接语音服务器", modifier = Modifier.fillMaxWidth()) {
                 connect()
             }
 
@@ -86,19 +86,19 @@ class TestWebsocketActivity : BasicActivity() {
 
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.content_item_margin)))
 
-            FButton(text = "发送文本请求", modifier = Modifier.fillMaxWidth()) {
+            FButton(text = "发送文本对话", modifier = Modifier.fillMaxWidth()) {
                 sendText()
             }
 
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.content_item_margin)))
 
-            FButton(text = "发送意图请求", modifier = Modifier.fillMaxWidth()) {
+            FButton(text = "发送意图对话", modifier = Modifier.fillMaxWidth()) {
                 sendIntent()
             }
 
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.content_item_margin)))
 
-            FButton(text = "发送语音请求", modifier = Modifier.fillMaxWidth()) {
+            FButton(text = "发送语音对话", modifier = Modifier.fillMaxWidth()) {
                 sendVoice()
             }
 
