@@ -169,4 +169,10 @@ dependencies {
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:3.0-alpha-1'
+
+    //录音流
+    implementation files('libs/TarsosDSP-Android-latest.jar')
+//    implementation 'be.tarsos.dsp:core:2.5'
+//    implementation 'be.tarsos.dsp:jvm:2.5'
+
 }

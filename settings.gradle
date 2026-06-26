@@ -33,6 +33,11 @@ dependencyResolutionManagement {
         maven { url = 'https://maven.aliyun.com/repository/apache-snapshots' }
 
         maven {url = 'https://gitee.com/richard-x/android-maven-repo/raw/master'}
+
+        maven {
+            name = "TarsosDSP repository"
+            url = "https://mvn.0110.be/releases"
+        }
     }
 }
 

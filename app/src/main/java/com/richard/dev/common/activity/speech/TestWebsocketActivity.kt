@@ -16,6 +16,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.fastjson.TypeReference
 import com.richard.dev.common.R
+import com.richard.dev.common.activity.speech.AudioVadRecorder.RecorderCallback
 import com.richard.dev.common.activity.speech.model.BasicSpeechReply
 import com.richard.dev.common.activity.speech.model.SpeechTextResult
 import com.richard.ilbrary.compose.widget.FButton
@@ -27,12 +28,15 @@ import com.richard.library.context.util.isNull
 import com.richard.library.context.util.media.AudioItem
 import com.richard.library.context.util.media.AudioSourceType
 import com.richard.library.context.util.media.MediaPlayerUtil
+import com.richard.library.context.util.media.TTSSpeaker
 import com.richard.library.context.util.startsWith
 import com.richard.library.net.websocket.WebSocketClient
+import com.richard.library.permission.PermissionRequester
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.UUID
+
 
 /**
  * @author: Richard
@@ -44,6 +48,11 @@ class TestWebsocketActivity : BasicActivity() {
 
     var webSocketClient: WebSocketClient? = null
     val player = MediaPlayerUtil()
+
+    // 录音VAD工具实例
+    private lateinit var speechRecorder: AudioVadRecorder
+    private val REQUEST_RECORD_PERM = 1001
+
 
     companion object {
         fun start(context: Context) {
@@ -60,7 +69,35 @@ class TestWebsocketActivity : BasicActivity() {
     }
 
     override fun initData() {
+        //https://0110.be/releases/TarsosDSP/
+        speechRecorder = AudioVadRecorder.create(this)
+            .silenceThreshDb(-80.0)
+            .saveWavEnable(true)
+            .build()
 
+        speechRecorder.setCallback(object : RecorderCallback {
+            override fun onVoiceStateChange(hasVoice: Boolean, currentDB: Double) {
+                // UI更新分贝、人声状态
+                Log.d("VAD", "是否有人声：$hasVoice DB：$currentDB")
+            }
+
+            override fun onRealTimePcm(pcmBytes: ByteArray?) {
+                // 实时原始PCM流，可用于实时语音识别、传输
+            }
+
+            override fun onSilenceAutoStop() {
+                Log.d("VAD", "静音自动结束录音")
+            }
+
+            override fun onWavSaved(wavPath: String?) {
+                // 文件保存成功回调
+                Log.d("VAD", "录音文件路径：$wavPath")
+            }
+
+            override fun onError(msg: String?, e: Exception?) {
+                Log.d("VAD", "录音onError：$e")
+            }
+        })
     }
 
     override fun bindListener() {
@@ -102,8 +139,26 @@ class TestWebsocketActivity : BasicActivity() {
                 sendVoice()
             }
 
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.content_item_margin)))
+
+            FButton(text = "开始录音并播放", modifier = Modifier.fillMaxWidth()) {
+                PermissionRequester.with(this@TestWebsocketActivity)
+                    .permission(android.Manifest.permission.RECORD_AUDIO)
+                    .request {
+                        TTSSpeaker.getInstance().speakImmediately("今天重庆天气怎么样？")
+                        speechRecorder.startRecord()
+                    }
+            }
+
+            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.content_item_margin)))
+
+            FButton(text = "停止录音", modifier = Modifier.fillMaxWidth()) {
+                speechRecorder.stopRecord()
+            }
+
         }
     }
+
 
     /**
      * 发送意图请求
@@ -199,7 +254,10 @@ class TestWebsocketActivity : BasicActivity() {
     }
 
     override fun onDestroy() {
+        player.stop()
+        player.release()
         webSocketClient?.disconnect()
+        speechRecorder.release()
         super.onDestroy()
     }
 }

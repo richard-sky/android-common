@@ -15,6 +15,7 @@ import com.richard.library.context.util.LogUtil;
 import com.richard.library.basic.widget.Loading;
 import com.richard.library.bluetooth.core.BleManager;
 import com.richard.library.context.AppContext;
+import com.richard.library.context.util.media.TTSSpeaker;
 import com.richard.library.net.http.request.LogCallback;
 import com.richard.library.net.http.request.RequestClient;
 
@@ -76,6 +77,9 @@ public class App extends MultiDexApplication {
                     .build();
             StrictMode.setVmPolicy(vmPolicy);
         }
+
+        //TTS初始化
+        TTSSpeaker.getInstance().init(null);
 
         //初始化异常统一处理器
         CrashHandler.getInstance().init();
