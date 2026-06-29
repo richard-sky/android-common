@@ -158,7 +158,7 @@ class TestWebsocketActivity : BasicActivity() {
                 PermissionRequester.with(this@TestWebsocketActivity)
                     .permission(android.Manifest.permission.RECORD_AUDIO)
                     .request {
-                        TTSSpeaker.getInstance().speakImmediately("今天重庆天气怎么样？")
+                        TTSSpeaker.getInstance().speakImmediately("What's the weather like in Chongqing tomorrow?")
                         speechRecorder.startRecord()
                     }
             }
@@ -257,6 +257,7 @@ class TestWebsocketActivity : BasicActivity() {
         //asrParams["enableCloudVAD"] = true
         asrParams["returnVadStart"] = true
         asrParams["returnVadEnd"] = true
+        asrParams["res"] = "aienglish-mix"//切换到识别中英文的能力
 
         params["audio"] = audio
         params["asrParams"] = asrParams
@@ -269,8 +270,8 @@ class TestWebsocketActivity : BasicActivity() {
 
             override fun onReceive(data: SpeechResult) {
                 if (data.isTopic("dm.output")) {
-                    //TTSSpeaker.getInstance().speakImmediately(data.dm.input)
-                    uiView.showMsgDialog("你说话的内容是: ${data.dm.input}")
+                    player.play(AudioItem(data.speakUrl, AudioSourceType.PATH_URL))
+                    uiView.showMsgDialog("你说话的内容是: ${data.dm.input.lowercase()}")
                 }
             }
         })
