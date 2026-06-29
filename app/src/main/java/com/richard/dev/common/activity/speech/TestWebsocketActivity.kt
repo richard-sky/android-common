@@ -15,12 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.fastjson.TypeReference
-import com.richard.dev.common.BuildConfig
 import com.richard.dev.common.R
 import com.richard.dev.common.activity.speech.AudioVadRecorder.RecorderCallback
 import com.richard.dev.common.activity.speech.model.BasicSpeechReply
 import com.richard.dev.common.activity.speech.model.DeviceActive
-import com.richard.dev.common.activity.speech.model.SpeechTextResult
+import com.richard.dev.common.activity.speech.model.SpeechResult
 import com.richard.ilbrary.compose.widget.FButton
 import com.richard.ilbrary.compose.widget.PageScaffold
 import com.richard.library.basic.basic.BasicActivity
@@ -37,15 +36,16 @@ import com.richard.library.context.util.media.AudioItem
 import com.richard.library.context.util.media.AudioSourceType
 import com.richard.library.context.util.media.MediaPlayerUtil
 import com.richard.library.context.util.media.TTSSpeaker
-import com.richard.library.context.util.startsWith
 import com.richard.library.net.http.model.RequestParams
 import com.richard.library.net.http.request.Requester
+import com.richard.library.net.websocket.OnReceive
 import com.richard.library.net.websocket.WebSocketClient
 import com.richard.library.permission.PermissionRequester
 import com.richard.library.security.EncryptUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okio.ByteString
 import java.util.UUID
 
 
@@ -94,10 +94,12 @@ class TestWebsocketActivity : BasicActivity() {
 
             override fun onRealTimePcm(pcmBytes: ByteArray) {
                 // 实时原始PCM流，可用于实时语音识别、传输
+                webSocketClient?.sendMessage(pcmBytes)
             }
 
             override fun onSilenceAutoStop() {
                 Log.d("VAD", "静音自动结束录音")
+                webSocketClient?.sendMessage(ByteString.of())
             }
 
             override fun onWavSaved(wavPath: String?) {
@@ -186,17 +188,20 @@ class TestWebsocketActivity : BasicActivity() {
 
             val result = withContext(Dispatchers.IO) {
                 webSocketClient?.invoke(params, object : TypeReference<BasicSpeechReply>() {}) {
-                    return@invoke it.recordId.startsWith(params["recordId"].toString())
+                    return@invoke it.isRecordId(params["recordId"])
                 }
             }
 
             uiView.dismissLoading()
 
-            if (result?.error.isNotNull()) {
-                uiView.showMsgDialog(result.error?.errMsg)
+            if (result.isNull()) {
+                uiView.showMsgDialog("请求失败")
+                return@launch
             }
 
-            Log.d("testtt", "result = $result")
+            if (result.isError) {
+                uiView.showMsgDialog(result.errMsg)
+            }
         }
     }
 
@@ -213,20 +218,23 @@ class TestWebsocketActivity : BasicActivity() {
             params["recordId"] = UUID.randomUUID().toString().replace("-", "")
 
             val result = withContext(Dispatchers.IO) {
-                webSocketClient?.invoke(params, object : TypeReference<SpeechTextResult>() {}) {
-                    return@invoke it.recordId.startsWith(params["recordId"].toString())
+                webSocketClient?.invoke(params, object : TypeReference<SpeechResult>() {}) {
+                    return@invoke it.isRecordId(params["recordId"])
                 }
             }
 
             uiView.dismissLoading()
 
-            if (result?.error.isNotNull()) {
-                uiView.showMsgDialog(result.error?.errMsg)
+            if (result.isNull()) {
+                uiView.showMsgDialog("请求失败")
+                return@launch
+            }
+
+            if (result.isError) {
+                uiView.showMsgDialog(result.errMsg)
             } else if (result.isNotNull()) {
                 player.play(AudioItem(result.speakUrl, AudioSourceType.PATH_URL))
             }
-
-            Log.d("testtt", "result = $result")
         }
     }
 
@@ -234,8 +242,40 @@ class TestWebsocketActivity : BasicActivity() {
      * 发送语音请求
      */
     private fun sendVoice() {
+        val params = RequestParams()
+        params["topic"] = "recorder.stream.start"
+        params["recordId"] = IdGenerator.getMixId(32)
 
+        val audio = RequestParams()
+        audio["audioType"] = "wav"
+        audio["sampleRate"] = 16000
+        audio["channel"] = 1
+        audio["sampleBytes"] = 2
+
+        val asrParams = RequestParams()
+        //asrParams["enableVAD"] = true
+        asrParams["enableCloudVAD"] = true
+        asrParams["returnVadStart"] = true
+        asrParams["returnVadEnd"] = true
+
+        params["audio"] = audio
+        params["asrParams"] = asrParams
+
+        webSocketClient?.onMain(params, object : OnReceive<SpeechResult>() {
+
+            override fun filter(data: SpeechResult): Boolean {
+                return data.isRecordId(params["recordId"])
+            }
+
+            override fun onReceive(data: SpeechResult) {
+                if (data.isTopic("dm.output")) {
+                    //TTSSpeaker.getInstance().speakImmediately(data.dm.input)
+                    uiView.showMsgDialog("你说话的内容是: ${data.dm.input}")
+                }
+            }
+        })
     }
+
 
     /**
      * 连接WebSocket
@@ -245,6 +285,9 @@ class TestWebsocketActivity : BasicActivity() {
         val productKey = "cc5abaa3c5782ac9dd6e53dd55ed0796"
         val productSecret = "bac74618ed35f0ee122d4e8166fd3a35"
         val apiKey = "95827aacab7e95827aacab7e6a3cecc5"
+
+        //固定本地设备id，以免平台免费额度用完
+        val deviceId = "2332ca9e531fc34afba980930583bb6a2"
 
         lifecycleScope.launch {
             var deviceActive =
@@ -264,7 +307,7 @@ class TestWebsocketActivity : BasicActivity() {
 
                 val bodyParams = RequestParams()
                 bodyParams["platform"] = "android"
-                bodyParams["deviceId"] = DeviceUtil.getUniqueDeviceId()
+                bodyParams["deviceId"] = deviceId
                 bodyParams["packageName"] = AppUtil.getAppPackageName()
                 bodyParams["buildVariant"] = /*BuildConfig.BUILD_TYPE*/"release"
                 bodyParams["displayMatrix"] =
@@ -308,13 +351,13 @@ class TestWebsocketActivity : BasicActivity() {
                 params["nonce"] = IdGenerator.getMixId(8)
                 params["timestamp"] = System.currentTimeMillis()
                 params["authType"] = "DEVICESIG"
-                params["communicationType"] = "fullDuplex"//全双工传入
+                //params["communicationType"] = "fullDuplex"//全双工传入
                 params["sig"] = EncryptUtil.encryptHmacSHA1ToString(
                     "${params["deviceName"]}${params["nonce"]}${params["productId"]}${params["timestamp"]}",
                     deviceActive.deviceSecret
                 ).lowercase()
 
-                LogUtil.d("testtt",URLUtil.completeParams("wss://dds.dui.ai/dds/v3/prod", params))
+                LogUtil.d("testtt", URLUtil.completeParams("wss://dds.dui.ai/dds/v3/prod", params))
 
                 webSocketClient = WebSocketClient.create()
                     .url(URLUtil.completeParams("wss://dds.dui.ai/dds/v3/prod", params))

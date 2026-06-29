@@ -9,7 +9,7 @@ import java.util.List;
  * @version: 1.0
  * @description: none
  */
-public class SpeechTextResult extends BasicSpeechReply implements Serializable {
+public class SpeechResult extends BasicSpeechReply implements Serializable {
 
     private String speakUrl;
     private Integer ttsSampleRate;

@@ -1,5 +1,8 @@
 package com.richard.dev.common.activity.speech.model;
 
+import com.richard.library.context.util.ObjectUtilKt;
+import com.richard.library.context.util.StringUtilKt;
+
 import java.io.Serializable;
 
 /**
@@ -13,18 +16,60 @@ public class BasicSpeechReply implements Serializable {
     /// uuid，标识一次请求，32字符
     private String recordId;
 
-    /// 向前兼容（sessionId替代了）待废弃
-    @Deprecated
-    private String contextId;
-
-    /// uuid，服务端通过相同的sessionId关联多轮请求的上下文；首轮对话请求不需要携带；非首轮对话请求取值是上一轮服务端返回结果中的sessionId
-    private String sessionId;
-
     /// 对话结果topic (v3 接口新增)
     private String topic;
 
     /// 发送错误时的错误信息
     private Error error;
+
+    /// 错误信息
+    private String errMsg;
+
+    /// 错误id
+    private String errId;
+
+    /**
+     * 验证当前服务器回复消息是否属于该指定请求
+     *
+     * @param recordId 请求时指定的id
+     */
+    public boolean isRecordId(Object recordId) {
+        return this.recordId.startsWith(ObjectUtilKt.toString(recordId));
+    }
+
+    /**
+     * 验证是否属于指定topic
+     */
+    public boolean isTopic(String topic) {
+        return StringUtilKt.eqVal(this.topic, topic);
+    }
+
+    /**
+     * 是否为错误消息
+     */
+    public boolean isError() {
+        return error != null || errId != null;
+    }
+
+    /**
+     * 获取错误信息
+     */
+    public String getErrMsg() {
+        if (error != null) {
+            return error.getErrMsg();
+        }
+        return errMsg;
+    }
+
+    /**
+     * 获取错误id
+     */
+    public String getErrId() {
+        if (error != null) {
+            return error.getErrId();
+        }
+        return errId;
+    }
 
     public String getRecordId() {
         return recordId;
@@ -32,22 +77,6 @@ public class BasicSpeechReply implements Serializable {
 
     public void setRecordId(String recordId) {
         this.recordId = recordId;
-    }
-
-    public String getContextId() {
-        return contextId;
-    }
-
-    public void setContextId(String contextId) {
-        this.contextId = contextId;
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
     }
 
     public String getTopic() {
@@ -58,12 +87,16 @@ public class BasicSpeechReply implements Serializable {
         this.topic = topic;
     }
 
-    public Error getError() {
-        return error;
-    }
-
     public void setError(Error error) {
         this.error = error;
+    }
+
+    public void setErrMsg(String errMsg) {
+        this.errMsg = errMsg;
+    }
+
+    public void setErrId(String errId) {
+        this.errId = errId;
     }
 
     public static class Error implements Serializable {
