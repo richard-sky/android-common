@@ -16,7 +16,7 @@ import java.lang.reflect.Type;
 public abstract class OnReceive<T> implements InvokeFilter<T> {
 
     private final Type type;
-    private boolean isCallMain = false;//回调onReceive方法时是否切换至主线程回调
+    private boolean isCallMain = false;//回调onReceive方法时是否切换至主线程回调(默认)
 
     public OnReceive() {
         type = JsonKt.getType(this);

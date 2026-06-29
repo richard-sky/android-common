@@ -220,9 +220,7 @@ public class IdGenerator {
      * 示例：f47ac10b58cc4372a57d2b9349966666
      */
     public static String generateUUID() {
-        String uuidStr = UUID.randomUUID().toString();
-        // 移除所有 "-"
-        return uuidStr.replace("-", "");
+        return UUID.randomUUID().toString().replace("-", "");
     }
 
     /**

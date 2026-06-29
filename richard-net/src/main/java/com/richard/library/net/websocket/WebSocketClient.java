@@ -104,9 +104,13 @@ public class WebSocketClient {
      * @param isBlocking 是否同步阻塞连接webSocket
      */
     private synchronized void startConnect(boolean isBlocking) throws Throwable {
-        if (currentState == ConnectionState.CONNECTED ||
-                currentState == ConnectionState.CONNECTING) {
-            LogUtil.wTag(TAG, "WebSocket已连接或正在连接");
+        if (currentState == ConnectionState.CONNECTED) {
+            LogUtil.wTag(TAG, "WebSocket已连接到");
+            return;
+        }
+
+        if (currentState == ConnectionState.CONNECTING) {
+            LogUtil.wTag(TAG, "WebSocket正在连接");
             return;
         }
 
@@ -286,7 +290,7 @@ public class WebSocketClient {
         if (webSocket != null && isConnected()) {
             boolean result = webSocket.send(message);
             if (result) {
-                LogUtil.dTag(TAG, "发送消息: " + message);
+                LogUtil.dTag(TAG, "已发送消息: " + message);
             } else {
                 LogUtil.eTag(TAG, "发送消息失败");
             }
@@ -311,7 +315,7 @@ public class WebSocketClient {
         if (webSocket != null && isConnected()) {
             boolean result = webSocket.send(message);
             if (result) {
-                LogUtil.dTag(TAG, "发送二进制消息，大小: " + message.size());
+                LogUtil.dTag(TAG, "已发送二进制消息，大小: " + message.size());
             } else {
                 LogUtil.eTag(TAG, "发送二进制消息失败");
             }
@@ -417,7 +421,6 @@ public class WebSocketClient {
         if (onReceives.contains(listener)) {
             return;
         }
-        listener.setCallMain(false);
         onReceives.add(listener);
         this.sendMessage(params);
     }

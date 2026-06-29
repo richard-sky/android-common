@@ -253,8 +253,8 @@ class TestWebsocketActivity : BasicActivity() {
         audio["sampleBytes"] = 2
 
         val asrParams = RequestParams()
-        //asrParams["enableVAD"] = true
-        asrParams["enableCloudVAD"] = true
+        asrParams["enableVAD"] = true
+        //asrParams["enableCloudVAD"] = true
         asrParams["returnVadStart"] = true
         asrParams["returnVadEnd"] = true
 
