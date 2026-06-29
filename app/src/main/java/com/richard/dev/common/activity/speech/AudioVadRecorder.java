@@ -3,7 +3,6 @@ package com.richard.dev.common.activity.speech;
 import android.content.Context;
 import android.util.Log;
 
-import com.richard.library.context.util.LimitRequester;
 import com.richard.library.context.util.ThreadUtil;
 import com.richard.library.context.util.UIThread;
 
@@ -51,7 +50,6 @@ public class AudioVadRecorder {
     private final ByteBuffer reuseShortBuffer;
     private final byte[] reusePcmBuffer;
 
-    private Boolean lastVoiceState = null;
 
     // 对外回调接口
     public interface RecorderCallback {
@@ -218,14 +216,11 @@ public class AudioVadRecorder {
     }
 
     public void stopRecord() {
-        vadLimitRequester.clearPost();
-        hasVoice = false;
         // 停止音频采集器
         if (audioDispatcher != null) {
             audioDispatcher.stop();
             audioDispatcher = null;
         }
-        lastVoiceState = null;
 
         // 异步转WAV，不阻塞主线程、音频线程
         if (saveWavEnable && tempPcmFile != null && tempPcmFile.exists()) {
@@ -278,29 +273,29 @@ public class AudioVadRecorder {
     }
 
     // VAD人声状态切换处理
-    private final LimitRequester vadLimitRequester = new LimitRequester(UIThread.getHandler(), 1500, 1600);
-    private boolean hasVoice = false;
+    private int noVoiceCount = 0;
 
     private void handleVadSwitch(double db) {
-        vadLimitRequester.setIdleDelayExecute(true);
-        vadLimitRequester.post(() -> {
-            hasVoice = db > silenceThreshDb;
+        int originVoiceCount = noVoiceCount;
+        boolean hasVoice = db > silenceThreshDb;
+        if (hasVoice) {
+            noVoiceCount = 0;
+        } else {
+            noVoiceCount++;
+        }
 
-            if (lastVoiceState != null && hasVoice == lastVoiceState) {
-                return;
-            }
-
-            lastVoiceState = hasVoice;
-
-            //主线程回调人声变化
+        //主线程回调人声变化
+        if (noVoiceCount - 1 != originVoiceCount && noVoiceCount != 0) {
             if (callback != null) callback.onVoiceStateChange(hasVoice, db);
+        }
 
-            if (!hasVoice) {
-                Log.d(TAG, "静音超时自动停止录音");
-                if (callback != null) callback.onSilenceAutoStop();
-                stopRecord();
-            }
-        });
+        if (noVoiceCount < 10) {
+            return;
+        }
+
+        Log.d(TAG, "静音超时自动停止录音");
+        if (callback != null) callback.onSilenceAutoStop();
+        stopRecord();
     }
 
     // 修复3：复用ByteBuffer/byte数组，消除频繁GC导致的音频丢帧卡顿

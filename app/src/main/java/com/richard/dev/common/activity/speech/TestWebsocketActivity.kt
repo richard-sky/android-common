@@ -15,13 +15,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.lifecycleScope
 import com.alibaba.fastjson.TypeReference
+import com.richard.dev.common.BuildConfig
 import com.richard.dev.common.R
 import com.richard.dev.common.activity.speech.AudioVadRecorder.RecorderCallback
 import com.richard.dev.common.activity.speech.model.BasicSpeechReply
+import com.richard.dev.common.activity.speech.model.DeviceActive
 import com.richard.dev.common.activity.speech.model.SpeechTextResult
 import com.richard.ilbrary.compose.widget.FButton
 import com.richard.ilbrary.compose.widget.PageScaffold
 import com.richard.library.basic.basic.BasicActivity
+import com.richard.library.context.AppContext
+import com.richard.library.context.util.AppUtil
+import com.richard.library.context.util.DeviceUtil
+import com.richard.library.context.util.IdGenerator
+import com.richard.library.context.util.LogUtil
+import com.richard.library.context.util.SPUtil
 import com.richard.library.context.util.URLUtil
 import com.richard.library.context.util.isNotNull
 import com.richard.library.context.util.isNull
@@ -30,8 +38,11 @@ import com.richard.library.context.util.media.AudioSourceType
 import com.richard.library.context.util.media.MediaPlayerUtil
 import com.richard.library.context.util.media.TTSSpeaker
 import com.richard.library.context.util.startsWith
+import com.richard.library.net.http.model.RequestParams
+import com.richard.library.net.http.request.Requester
 import com.richard.library.net.websocket.WebSocketClient
 import com.richard.library.permission.PermissionRequester
+import com.richard.library.security.EncryptUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -71,7 +82,7 @@ class TestWebsocketActivity : BasicActivity() {
     override fun initData() {
         //https://0110.be/releases/TarsosDSP/
         speechRecorder = AudioVadRecorder.create(this)
-            .silenceThreshDb(-80.0)
+            .silenceThreshDb(-110.0)
             .saveWavEnable(true)
             .build()
 
@@ -81,7 +92,7 @@ class TestWebsocketActivity : BasicActivity() {
                 Log.d("VAD", "是否有人声：$hasVoice DB：$currentDB")
             }
 
-            override fun onRealTimePcm(pcmBytes: ByteArray?) {
+            override fun onRealTimePcm(pcmBytes: ByteArray) {
                 // 实时原始PCM流，可用于实时语音识别、传输
             }
 
@@ -159,7 +170,6 @@ class TestWebsocketActivity : BasicActivity() {
         }
     }
 
-
     /**
      * 发送意图请求
      */
@@ -231,26 +241,88 @@ class TestWebsocketActivity : BasicActivity() {
      * 连接WebSocket
      */
     private fun connect() {
-        if (webSocketClient.isNull()) {
-            val params = HashMap<String, Any>()
-            params["serviceType"] = "websocket"
-            params["productId"] = "279635113"
+        val productId = "279635113"
+        val productKey = "cc5abaa3c5782ac9dd6e53dd55ed0796"
+        val productSecret = "bac74618ed35f0ee122d4e8166fd3a35"
+        val apiKey = "95827aacab7e95827aacab7e6a3cecc5"
 
-            //以下参数是云对云的对接方式
-            params["apikey"] = "95827aacab7e95827aacab7e6a3cecc5"
+        lifecycleScope.launch {
+            var deviceActive =
+                SPUtil.getObject<DeviceActive>("deviceActive", DeviceActive::class.java)
+            //设备激活
+            if (deviceActive.isNull()) {
+                val queryParams = RequestParams()
+                queryParams["productKey"] = productKey
+                queryParams["format"] = "plain"
+                queryParams["productId"] = productId
+                queryParams["timestamp"] = System.currentTimeMillis()
+                queryParams["nonce"] = IdGenerator.getMixId(8)
+                queryParams["sig"] = EncryptUtil.encryptHmacSHA1ToString(
+                    "${queryParams["productKey"]}${queryParams["format"]}${queryParams["nonce"]}${queryParams["productId"]}${queryParams["timestamp"]}",
+                    productSecret
+                ).lowercase()
 
-            //以下参数是设备对云的对接方式
-            //params["deviceName"] = DeviceUtil.getUniqueDeviceId()
-            //params["nonce"] = UUID.randomUUID().toString().replace("-", "")
-            //params["sig"] = ""
-            //params["timestamp"] = System.currentTimeMillis()
+                val bodyParams = RequestParams()
+                bodyParams["platform"] = "android"
+                bodyParams["deviceId"] = DeviceUtil.getUniqueDeviceId()
+                bodyParams["packageName"] = AppUtil.getAppPackageName()
+                bodyParams["buildVariant"] = /*BuildConfig.BUILD_TYPE*/"release"
+                bodyParams["displayMatrix"] =
+                    "${AppContext.getScreenWidth()}*${AppContext.getScreenHeight()}"
+                bodyParams["buildModel"] = DeviceUtil.getModel()
+                bodyParams["buildManufacture"] = DeviceUtil.getManufacturer()
+                bodyParams["buildDevice"] = DeviceUtil.getVendor()
 
-            webSocketClient = WebSocketClient.create()
-                .url(URLUtil.completeParams("wss://dds.dui.ai/dds/v3/prod", params))
-                .build()
+                val response = withContext(Dispatchers.IO) {
+                    return@withContext Requester.create()
+                        .url(
+                            URLUtil.completeParams(
+                                "https://auth.dui.ai/auth/device/register",
+                                queryParams
+                            )
+                        )
+                        .postJson(bodyParams)
+                        .request(object : TypeReference<DeviceActive>() {})
+                }
+
+                if (response.errId.isNotNull()) {
+                    uiView.showErrorMsg(response.error)
+                    return@launch
+                } else {
+                    deviceActive = response
+                    SPUtil.put("deviceActive", deviceActive)
+                }
+            }
+
+            //连接WebSocket
+            if (webSocketClient.isNull()) {
+                val params = HashMap<String, Any>()
+                params["serviceType"] = "websocket"
+                params["productId"] = productId
+
+                //以下参数是云对云的对接方式
+                //params["apikey"] = apiKey
+
+                //以下参数是设备对云的对接方式
+                params["deviceName"] = deviceActive.deviceName
+                params["nonce"] = IdGenerator.getMixId(8)
+                params["timestamp"] = System.currentTimeMillis()
+                params["authType"] = "DEVICESIG"
+                params["communicationType"] = "fullDuplex"//全双工传入
+                params["sig"] = EncryptUtil.encryptHmacSHA1ToString(
+                    "${params["deviceName"]}${params["nonce"]}${params["productId"]}${params["timestamp"]}",
+                    deviceActive.deviceSecret
+                ).lowercase()
+
+                LogUtil.d("testtt",URLUtil.completeParams("wss://dds.dui.ai/dds/v3/prod", params))
+
+                webSocketClient = WebSocketClient.create()
+                    .url(URLUtil.completeParams("wss://dds.dui.ai/dds/v3/prod", params))
+                    .build()
+            }
+
+            webSocketClient?.connect()
         }
-
-        webSocketClient?.connect()
     }
 
     override fun onDestroy() {
