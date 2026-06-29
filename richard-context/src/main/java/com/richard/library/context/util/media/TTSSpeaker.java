@@ -36,6 +36,7 @@ public final class TTSSpeaker {
     private Locale locale = Locale.getDefault();
     private String ttsEngine;//当前设置的语音引擎
     private Voice voice;//当前设置的语音角色
+    private InitCallback initCallback;//初始化回调
 
     //语速0.0~2.0 默认1.0
     private float speechRate = 1.0F;
@@ -59,21 +60,27 @@ public final class TTSSpeaker {
      * 初始化TextToSpeech
      */
     public void init(InitCallback initCallback) {
-        this.init(initCallback, null);
+        this.initCallback = initCallback;
+        this.execInit(null);
     }
 
     /**
-     * 初始化TextToSpeech
+     * 初始化TextToSpeech(异步)
      */
-    private synchronized void init(InitCallback initCallback, SimpleInitCallback simpleInitCallback) {
+    private synchronized void execInit(SimpleInitCallback simpleInitCallback) {
         this.destroy();
         speech = new TextToSpeech(AppContext.get(), status -> {
             isInitSuccess = status == TextToSpeech.SUCCESS;
 
             if (status == TextToSpeech.SUCCESS) {
                 this.setLanguage(locale);
-                this.setSpeechParams(speechRate, pitch);
-                this.setVoice(voice);
+
+                speech.setSpeechRate(speechRate);
+                speech.setPitch(pitch);
+
+                if (voice != null) {
+                    speech.setVoice(voice);
+                }
 
                 speech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                     @Override
@@ -95,8 +102,12 @@ public final class TTSSpeaker {
                     }
                 });
 
-                if (isInitSuccess && simpleInitCallback != null) {
-                    simpleInitCallback.onInitSuccess();
+                if (simpleInitCallback != null) {
+                    if (isInitSuccess) {
+                        simpleInitCallback.onInitSuccess();
+                    } else {
+                        simpleInitCallback.onInitFailed();
+                    }
                 }
             }
 
@@ -119,6 +130,8 @@ public final class TTSSpeaker {
         if (isAvailable()) {
             speech.setSpeechRate(speechRate);
             speech.setPitch(pitch);
+        } else {
+            Log.e(getClass().getName(), "请先初始化" + getClass().getName());
         }
     }
 
@@ -130,7 +143,11 @@ public final class TTSSpeaker {
      */
     public boolean setLanguage(Locale locale) {
         this.locale = locale;
-        if (!this.isAvailable()) return false;
+        if (!this.isAvailable()) {
+            Log.e(getClass().getName(), "请先初始化" + getClass().getName());
+            return false;
+        }
+
         int result = speech.setLanguage(locale);
 
         if (result == TextToSpeech.LANG_NOT_SUPPORTED) {
@@ -163,7 +180,7 @@ public final class TTSSpeaker {
      */
     public void speak(String text, String utteranceId) {
         if (!this.isAvailable()) {
-            this.init(null, () -> startSpeak(text, utteranceId, TextToSpeech.QUEUE_ADD));
+            this.execInit(() -> startSpeak(text, utteranceId, TextToSpeech.QUEUE_ADD));
             return;
         }
         this.startSpeak(text, utteranceId, TextToSpeech.QUEUE_ADD);
@@ -186,7 +203,7 @@ public final class TTSSpeaker {
      */
     public void speakImmediately(String text, String utteranceId) {
         if (!this.isAvailable()) {
-            this.init(null, () -> startSpeak(text, utteranceId, TextToSpeech.QUEUE_FLUSH));
+            this.execInit(() -> startSpeak(text, utteranceId, TextToSpeech.QUEUE_FLUSH));
             return;
         }
         this.startSpeak(text, utteranceId, TextToSpeech.QUEUE_FLUSH);
@@ -221,8 +238,8 @@ public final class TTSSpeaker {
      */
     public List<TextToSpeech.EngineInfo> getInstalledTTSEngine() {
         List<TextToSpeech.EngineInfo> engines = speech.getEngines();
-        if (!this.isAvailable() || engines == null) {
-            return new ArrayList<>();
+        if (!this.isAvailable()) {
+            Log.e(getClass().getName(), "请先初始化" + getClass().getName());
         }
         return engines;
     }
@@ -231,8 +248,12 @@ public final class TTSSpeaker {
      * 获取当前TTS不同角色语音
      */
     public List<Voice> getVoice() {
+        if (!isAvailable()) {
+            Log.e(getClass().getName(), "请先初始化" + getClass().getName());
+            return new ArrayList<>();
+        }
         Set<Voice> voices = speech.getVoices();
-        if (!this.isAvailable() || voices == null) {
+        if (voices == null) {
             return new ArrayList<>();
         }
         return new ArrayList<>(voices);
@@ -243,9 +264,16 @@ public final class TTSSpeaker {
      */
     public boolean setVoice(Voice voice) {
         this.voice = voice;
-        if (this.isAvailable() && voice != null) {
+
+        if (!isAvailable()) {
+            Log.e(getClass().getName(), "请先初始化" + getClass().getName());
+            return false;
+        }
+
+        if (voice != null) {
             return speech.setVoice(voice) == TextToSpeech.SUCCESS;
         }
+
         return false;
     }
 
@@ -257,6 +285,17 @@ public final class TTSSpeaker {
     public void switchTTSEngine(String enginePackageName) {
         this.ttsEngine = enginePackageName;
         this.destroy();
+        this.execInit(new SimpleInitCallback() {
+            @Override
+            public void onInitSuccess() {
+                Log.d(getClass().getName(), String.format("切换 %s TTS引擎成功", enginePackageName));
+            }
+
+            @Override
+            public void onInitFailed() {
+                Log.d(getClass().getName(), String.format("切换 %s TTS引擎失败", enginePackageName));
+            }
+        });
     }
 
     /**
@@ -271,7 +310,7 @@ public final class TTSSpeaker {
      */
     public void saveTextToAudio(String text, File saveFile, String utteranceId) {
         if (!this.isAvailable()) {
-            this.init(null, () -> {
+            this.execInit(() -> {
                 speech.synthesizeToFile(text, null, saveFile, utteranceId);
             });
             return;
@@ -324,6 +363,12 @@ public final class TTSSpeaker {
          * 当初始化成功时回调
          */
         void onInitSuccess();
+
+        /**
+         * 当初始化失败时回调
+         */
+        default void onInitFailed() {
+        }
     }
 
     /**
