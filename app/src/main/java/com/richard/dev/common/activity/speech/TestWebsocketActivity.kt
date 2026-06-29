@@ -184,7 +184,7 @@ class TestWebsocketActivity : BasicActivity() {
             params["intent"] = "查天气"
             params["input"] = "查一下重庆市垫江明天的天气"
             params["task"] = "查天气"
-            params["recordId"] = UUID.randomUUID().toString().replace("-", "")
+            params["recordId"] = IdGenerator.generateUUID()
 
             val result = withContext(Dispatchers.IO) {
                 webSocketClient?.invoke(params, object : TypeReference<BasicSpeechReply>() {}) {
@@ -215,7 +215,7 @@ class TestWebsocketActivity : BasicActivity() {
             val params = HashMap<String, Any>()
             params["topic"] = "nlu.input.text"
             params["refText"] = "重庆明天的天气是怎么样的"
-            params["recordId"] = UUID.randomUUID().toString().replace("-", "")
+            params["recordId"] = IdGenerator.generateUUID()
 
             val result = withContext(Dispatchers.IO) {
                 webSocketClient?.invoke(params, object : TypeReference<SpeechResult>() {}) {
@@ -244,7 +244,7 @@ class TestWebsocketActivity : BasicActivity() {
     private fun sendVoice() {
         val params = RequestParams()
         params["topic"] = "recorder.stream.start"
-        params["recordId"] = IdGenerator.getMixId(32)
+        params["recordId"] = IdGenerator.generateUUID()
 
         val audio = RequestParams()
         audio["audioType"] = "wav"
