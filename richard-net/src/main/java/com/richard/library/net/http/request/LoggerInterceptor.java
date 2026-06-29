@@ -252,7 +252,7 @@ public class LoggerInterceptor implements Interceptor {
             e.printStackTrace();
         }
 
-        if (!isLogResponseBody || mediaType == null) {
+        if (!isLogResponseBody) {
             return response.newBuilder()
                     .build();
         }
