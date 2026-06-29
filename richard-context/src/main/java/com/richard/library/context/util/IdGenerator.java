@@ -1,4 +1,5 @@
 package com.richard.library.context.util;
+
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,12 +28,23 @@ public class IdGenerator {
      * 字符组合类型枚举
      */
     public enum CharType {
-        ONLY_NUM,        // 仅数字
-        ONLY_LOWER,      // 仅小写字母
-        ONLY_UPPER,      // 仅大写字母
-        NUM_LOWER,       // 数字+小写
-        NUM_UPPER,       // 数字+大写
-        ALL_MIX          // 数字+大小写混合
+        /// 仅数字
+        ONLY_NUM,
+
+        /// 仅小写字母
+        ONLY_LOWER,
+
+        /// 仅大写字母
+        ONLY_UPPER,
+
+        /// 数字+小写
+        NUM_LOWER,
+
+        /// 数字+大写
+        NUM_UPPER,
+
+        /// 数字+大小写混合
+        ALL_MIX
     }
 
     /**
@@ -52,7 +64,8 @@ public class IdGenerator {
         /// 是否拼接毫秒时间戳前缀
         private boolean appendTimestamp = false;
 
-        public IdConfig() {}
+        public IdConfig() {
+        }
 
         // 链式设置方法
         public IdConfig length(int length) {
@@ -160,11 +173,12 @@ public class IdGenerator {
 
     /**
      * 自定义字符池生成ID
-     * @param length 随机串长度
+     *
+     * @param length      随机串长度
      * @param customChars 自定义字符集，如"abc123XYZ"
-     * @param prefix 前缀
-     * @param suffix 后缀
-     * @param appendTs 是否追加时间戳
+     * @param prefix      前缀
+     * @param suffix      后缀
+     * @param appendTs    是否追加时间戳
      */
     public static String generateCustomId(int length, String customChars, String prefix, String suffix, boolean appendTs) {
         if (length <= 0 || customChars == null || customChars.isEmpty()) {
@@ -183,7 +197,8 @@ public class IdGenerator {
 
     /**
      * 批量生成指定数量不重复ID
-     * @param count 生成数量
+     *
+     * @param count  生成数量
      * @param config ID配置
      * @return 无重复ID列表
      */
@@ -199,6 +214,7 @@ public class IdGenerator {
     }
 
     // ===================== 新增 UUID 相关方法 =====================
+
     /**
      * 生成不带横线的标准32位UUID（小写）
      * 示例：f47ac10b58cc4372a57d2b9349966666
@@ -217,8 +233,10 @@ public class IdGenerator {
     }
 
     // ===================== 快捷工具方法 =====================
+
     /**
      * 纯数字ID（验证码专用）
+     *
      * @param length 位数，如6位验证码
      */
     public static String getNumId(int length) {
@@ -237,6 +255,7 @@ public class IdGenerator {
 
     /**
      * 带时间戳全局唯一ID（订单/设备ID）
+     *
      * @param randomLen 随机串长度
      */
     public static String getUniqueId(int randomLen) {
