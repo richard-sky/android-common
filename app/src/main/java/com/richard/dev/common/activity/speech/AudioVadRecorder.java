@@ -253,12 +253,16 @@ public class AudioVadRecorder {
                 float[] floatBuf = audioEvent.getFloatBuffer();
                 double currentDb = silenceDetector.currentSPL();
 
-                handleVadSwitch(currentDb);
+                boolean hasVoice = handleVadSwitch(currentDb);
 
                 Log.d("testtt", "当前声音分贝: " + currentDb + "   阀值: " + silenceThreshDb);
 
                 byte[] pcmData = floatTo16BitPCMReuse(floatBuf);
-                writePcmToTempFile(pcmData);
+
+                if (saveWavEnable) {
+                    writePcmToTempFile(pcmData);
+                }
+
                 if (callback != null) {
                     callback.onRealTimePcm(pcmData);
                 }
@@ -274,9 +278,9 @@ public class AudioVadRecorder {
 
     // VAD人声状态切换处理
     private int noVoiceCount = 0;
+    private boolean lastHasVoice = false;
 
-    private void handleVadSwitch(double db) {
-        int originVoiceCount = noVoiceCount;
+    private boolean handleVadSwitch(double db) {
         boolean hasVoice = db > silenceThreshDb;
         if (hasVoice) {
             noVoiceCount = 0;
@@ -285,17 +289,21 @@ public class AudioVadRecorder {
         }
 
         //主线程回调人声变化
-        if (noVoiceCount - 1 != originVoiceCount && noVoiceCount != 0) {
+        if (hasVoice != lastHasVoice) {
             if (callback != null) callback.onVoiceStateChange(hasVoice, db);
         }
 
+        lastHasVoice = hasVoice;
+
         if (noVoiceCount < 10) {
-            return;
+            return hasVoice;
         }
 
         Log.d(TAG, "静音超时自动停止录音");
         if (callback != null) callback.onSilenceAutoStop();
         stopRecord();
+
+        return hasVoice;
     }
 
     // 修复3：复用ByteBuffer/byte数组，消除频繁GC导致的音频丢帧卡顿
@@ -327,7 +335,7 @@ public class AudioVadRecorder {
     }
 
     private void writePcmToTempFile(byte[] pcmBytes) {
-        if (!saveWavEnable || pcmOs == null) return;
+        if (pcmOs == null) return;
         // 直接音频线程写短块，单块数据小不会阻塞
         try {
             pcmOs.write(pcmBytes);
