@@ -1,4 +1,4 @@
-package com.richard.library.context.util.media;
+package com.richard.library.context.util.media.player;
 
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioAttributes;
@@ -9,6 +9,8 @@ import android.util.SparseLongArray;
 
 import com.richard.library.context.util.ThreadUtil;
 import com.richard.library.context.AppContext;
+import com.richard.library.context.util.media.player.common.AudioItem;
+import com.richard.library.context.util.media.player.common.AudioSourceType;
 
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;

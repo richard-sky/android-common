@@ -15,7 +15,7 @@ import com.richard.library.context.util.LogUtil;
 import com.richard.library.basic.widget.Loading;
 import com.richard.library.bluetooth.core.BleManager;
 import com.richard.library.context.AppContext;
-import com.richard.library.context.util.media.TTSSpeaker;
+import com.richard.library.context.util.media.player.TTSSpeaker;
 import com.richard.library.net.http.request.LogCallback;
 import com.richard.library.net.http.request.RequestClient;
 

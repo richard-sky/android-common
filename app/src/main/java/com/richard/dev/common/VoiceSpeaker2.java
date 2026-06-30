@@ -5,9 +5,9 @@ import android.text.TextUtils;
 import com.richard.library.context.util.FileUtil;
 import com.richard.library.context.util.ObjectUtilKt;
 import com.richard.library.context.util.StringUtilKt;
-import com.richard.library.context.util.media.AudioItem;
-import com.richard.library.context.util.media.AudioSourceType;
-import com.richard.library.context.util.media.MediaPlayerUtil;
+import com.richard.library.context.util.media.player.common.AudioItem;
+import com.richard.library.context.util.media.player.common.AudioSourceType;
+import com.richard.library.context.util.media.player.MediaPlayerUtil;
 import com.richard.library.context.AppContext;
 
 import java.io.File;

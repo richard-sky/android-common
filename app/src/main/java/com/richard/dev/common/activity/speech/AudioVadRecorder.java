@@ -29,11 +29,11 @@ public class AudioVadRecorder {
 
     // 配置参数
     private final double silenceThreshDb;
-    private final long silenceStopDelayMs;
     private final int sampleRate;
     private final int bufferSize;
     private final float highPassFreq;
     private final boolean saveWavEnable;
+    private final boolean isSilenceAutoStop;
     private final Context appContext;
 
     // TarsosDSP核心实例
@@ -50,34 +50,36 @@ public class AudioVadRecorder {
     private final ByteBuffer reuseShortBuffer;
     private final byte[] reusePcmBuffer;
 
+    private int noVoiceCount = 0;
+    private boolean lastHasVoice = false;
+
 
     // 对外回调接口
     public interface RecorderCallback {
-        /**
-         * 人声状态切换回调
-         */
-        void onVoiceStateChange(boolean hasVoice, double currentDB);
 
         /**
          * 实时PCM字节流回调
+         *
+         * @param pcmBytes 录音pcm流
+         * @param hasVoice 当前pcm流是否有声
          */
-        void onRealTimePcm(byte[] pcmBytes);
+        void onRealTimePcm(byte[] pcmBytes, boolean hasVoice);
 
         /**
-         * 静音超时自动停止
+         * 采集异常
          */
-        void onSilenceAutoStop();
+        void onError(String msg, Exception e);
+
+        /**
+         * 当长时间没有静音时回调
+         */
+        default void onSilenceTimeout() {
+        }
 
         /**
          * WAV文件保存完成，saveWavEnable=true才会回调
          */
         default void onWavSaved(String wavPath) {
-        }
-
-        /**
-         * 采集异常
-         */
-        default void onError(String msg, Exception e) {
         }
     }
 
@@ -86,11 +88,11 @@ public class AudioVadRecorder {
     // ===================== 私有构造，仅Builder可调用 =====================
     private AudioVadRecorder(Builder builder) {
         this.silenceThreshDb = builder.silenceThreshDb;
-        this.silenceStopDelayMs = builder.silenceStopDelayMs;
         this.sampleRate = builder.sampleRate;
         this.bufferSize = builder.bufferSize;
         this.highPassFreq = builder.highPassFreq;
         this.saveWavEnable = builder.saveWavEnable;
+        this.isSilenceAutoStop = builder.isSilenceAutoStop;
         this.appContext = builder.appContext.getApplicationContext();
         this.callback = builder.callback;
 
@@ -107,12 +109,12 @@ public class AudioVadRecorder {
 
     public static class Builder {
         private final Context appContext;
-        private double silenceThreshDb = -45D; // 优化默认分贝阈值，原-120完全失效
-        private long silenceStopDelayMs = 1500L;
+        private double silenceThreshDb = -45D; // 默认分贝阈值
         private int sampleRate = 16000; // 语音推荐16k，22050兼容性差易卡顿
         private int bufferSize = 2048; // 加大缓冲减少麦克风断流
         private float highPassFreq = 300F; // 提高高通，过滤低频电流噪音
-        private boolean saveWavEnable = true;
+        private boolean saveWavEnable = false;//是否开启保存WAV文件
+        private boolean isSilenceAutoStop = true;//是否静音超时自动停止录音
         private RecorderCallback callback;
 
         // 必须传入上下文
@@ -120,13 +122,13 @@ public class AudioVadRecorder {
             this.appContext = context;
         }
 
-        public Builder silenceThreshDb(double db) {
-            this.silenceThreshDb = db;
+        public Builder silenceAutoStop(boolean enable) {
+            this.isSilenceAutoStop = enable;
             return this;
         }
 
-        public Builder silenceStopDelayMs(long ms) {
-            this.silenceStopDelayMs = ms;
+        public Builder silenceThreshDb(double db) {
+            this.silenceThreshDb = db;
             return this;
         }
 
@@ -169,6 +171,9 @@ public class AudioVadRecorder {
         this.callback = callback;
     }
 
+    /**
+     * 启动录音
+     */
     public void startRecord() {
         if (audioDispatcher != null) {
             Log.w(TAG, "录音正在运行，无需重复启动");
@@ -192,21 +197,7 @@ public class AudioVadRecorder {
             audioDispatcher.addAudioProcessor(buildAudioProcessor());
 
             // 守护线程运行音频采集
-            Thread captureThread = new Thread(() -> {
-                try {
-                    audioDispatcher.run();
-                } catch (Exception e) {
-                    String err = "音频采集异常";
-                    Log.e(TAG, err, e);
-                    UIThread.runOnUiThread(() -> {
-                        if (callback != null) callback.onError(err, e);
-                    });
-                    stopRecord();
-                }
-            }, "AudioCaptureThread");
-            captureThread.setDaemon(true);
-            captureThread.start();
-
+            ThreadUtil.executeByCached(audioDispatchTask);
         } catch (Exception e) {
             String errMsg = "初始化麦克风失败，请检查RECORD_AUDIO权限";
             Log.e(TAG, errMsg, e);
@@ -215,6 +206,28 @@ public class AudioVadRecorder {
         }
     }
 
+    /**
+     * 音频采集任务线程
+     */
+    private final ThreadUtil.RunTask audioDispatchTask = new ThreadUtil.RunTask() {
+        @Override
+        public void runEvent() {
+            try {
+                audioDispatcher.run();
+            } catch (Exception e) {
+                String err = "音频采集异常";
+                Log.e(TAG, err, e);
+                UIThread.runOnUiThread(() -> {
+                    if (callback != null) callback.onError(err, e);
+                });
+                stopRecord();
+            }
+        }
+    };
+
+    /**
+     * 停止录音
+     */
     public void stopRecord() {
         // 停止音频采集器
         if (audioDispatcher != null) {
@@ -236,7 +249,9 @@ public class AudioVadRecorder {
         Log.d(TAG, "录音已停止");
     }
 
-    // 页面销毁释放资源
+    /**
+     * 页面销毁释放资源
+     */
     public void release() {
         stopRecord();
         callback = null;
@@ -264,7 +279,7 @@ public class AudioVadRecorder {
                 }
 
                 if (callback != null) {
-                    callback.onRealTimePcm(pcmData);
+                    callback.onRealTimePcm(pcmData, hasVoice);
                 }
                 return true;
             }
@@ -276,10 +291,9 @@ public class AudioVadRecorder {
         };
     }
 
-    // VAD人声状态切换处理
-    private int noVoiceCount = 0;
-    private boolean lastHasVoice = false;
-
+    /**
+     * VAD人声状态切换处理
+     */
     private boolean handleVadSwitch(double db) {
         boolean hasVoice = db > silenceThreshDb;
         if (hasVoice) {
@@ -288,20 +302,18 @@ public class AudioVadRecorder {
             noVoiceCount++;
         }
 
-        //主线程回调人声变化
-        if (hasVoice != lastHasVoice) {
-            if (callback != null) callback.onVoiceStateChange(hasVoice, db);
-        }
-
         lastHasVoice = hasVoice;
 
         if (noVoiceCount < 10) {
             return hasVoice;
         }
 
-        Log.d(TAG, "静音超时自动停止录音");
-        if (callback != null) callback.onSilenceAutoStop();
-        stopRecord();
+        if (callback != null) callback.onSilenceTimeout();
+
+        if (isSilenceAutoStop) {
+            Log.d(TAG, "静音超时自动停止录音");
+            stopRecord();
+        }
 
         return hasVoice;
     }

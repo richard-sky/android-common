@@ -1,4 +1,4 @@
-package com.richard.library.context.util.media;
+package com.richard.library.context.util.media.player;
 
 import android.annotation.SuppressLint;
 import android.os.Build;

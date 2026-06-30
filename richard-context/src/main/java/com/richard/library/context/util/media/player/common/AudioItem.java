@@ -1,4 +1,4 @@
-package com.richard.library.context.util.media;
+package com.richard.library.context.util.media.player.common;
 
 import java.io.Serializable;
 
