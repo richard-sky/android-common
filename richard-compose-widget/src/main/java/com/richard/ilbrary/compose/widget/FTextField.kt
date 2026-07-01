@@ -121,7 +121,6 @@ fun FTextField(
     ),
 ) {
 
-    var currentText by remember { mutableStateOf(value) }
     val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
 
     // 监听是否聚焦
@@ -211,9 +210,8 @@ fun FTextField(
             enabled = isEditTextMode,
             readOnly = false,
             singleLine = singleLine,
-            value = currentText,
+            value = value,
             onValueChange = {
-                currentText = it
                 onValueChange?.invoke(it)
             },
             textStyle = textStyle,
@@ -224,7 +222,7 @@ fun FTextField(
             keyboardActions = keyboardActions,
             decorationBox = @Composable { innerTextField ->
                 DecorationBox(
-                    value = currentText,
+                    value = value,
                     visualTransformation = visualTransformation,
                     // 单行fillMaxHeight实现垂直居中，多行保持原有样式
                     innerTextField = {
@@ -240,7 +238,7 @@ fun FTextField(
                     },
                     // 占位符同步逻辑，单行居中、多行左上
                     placeholder = {
-                        if (currentText.isNotEmpty()) return@DecorationBox
+                        if (value.isNotEmpty()) return@DecorationBox
 
                         val boxModifier = if (singleLine) Modifier.fillMaxHeight() else Modifier
                         Box(
