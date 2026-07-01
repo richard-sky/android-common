@@ -23,7 +23,7 @@ ext {
     //发布动作执行./gradlew build和./gradlew publish
     maven_export = [
             groupId       : 'com.richard.library',
-            version       : '4.8.3',
+            version       : '4.8.4',
             remoteRepoUrl : '',
             username      : '',
             password      : '',
